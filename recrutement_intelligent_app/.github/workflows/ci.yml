@@ -1,4 +1,4 @@
-# .github/workflows/build.yml
+# .github/workflows/ci.yml
 name: Spring Boot CI
 
 on:
