@@ -1,14 +1,12 @@
-// src/app/core/sidebar/sidebar.ts
-
 import { Component } from '@angular/core';
-import { RouterModule } from '@angular/router';
+import { Router, RouterModule } from '@angular/router';
 
 @Component({
-  selector: 'app-sidebar',
-  standalone: true,
-  imports: [RouterModule],
+  selector:'app-sidebar',
+  standalone:true,
+  imports:[RouterModule],
 
-  template: `
+template: `
 
   <div class="sidebar">
 
@@ -35,7 +33,13 @@ import { RouterModule } from '@angular/router';
     <a routerLink="/app/recommendations">
       🤖 AI Matching
     </a>
+<button
+  class="logout"
+  (click)="logout()">
 
+  🚪 Logout
+
+</button>
   </div>
 
   `,
@@ -69,7 +73,33 @@ import { RouterModule } from '@angular/router';
     a:hover{
       background:#2563eb;
     }
-
+.logout{
+  margin-top:auto;
+  background:#ef4444;
+  color:white;
+  border:none;
+  padding:12px;
+  border-radius:12px;
+  cursor:pointer;
+}
   `]
+
+ 
 })
-export class Sidebar {}
+export class Sidebar {
+
+  constructor(
+    private router:Router
+  ){}
+
+  logout(){
+
+    localStorage.removeItem('token');
+
+    this.router.navigate(['/']);
+
+  }
+
+}
+  
+  

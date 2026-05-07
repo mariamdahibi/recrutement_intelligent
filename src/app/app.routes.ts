@@ -1,23 +1,18 @@
-// src/app/app.routes.ts
-
 import { Routes } from '@angular/router';
 import { MainLayout } from './layout/main-layout/main-layout';
 import { authGuard } from './core/guards/auth-guard';
 
 export const routes: Routes = [
 
-  // =========================
-  // LOGIN (PUBLIC)
-  // =========================
+  // LOGIN
   {
-  path: '',
-  loadComponent: () =>
-    import('./auth/login/login')
-      .then(m => m.Login)
-},
-  // =========================
-  // PROTECTED APP
-  // =========================
+    path: '',
+    loadComponent: () =>
+      import('./auth/login/login')
+        .then(m => m.Login)
+  },
+
+  // APP
   {
     path: 'app',
     component: MainLayout,
@@ -25,12 +20,7 @@ export const routes: Routes = [
 
     children: [
 
-      {
-        path: '',
-        redirectTo: 'dashboard',
-        pathMatch: 'full'
-      },
-
+      // DASHBOARD
       {
         path: 'dashboard',
         loadComponent: () =>
@@ -38,6 +28,7 @@ export const routes: Routes = [
             .then(m => m.RecruiterDashboard)
       },
 
+      // PROFILE
       {
         path: 'profile',
         loadComponent: () =>
@@ -45,6 +36,7 @@ export const routes: Routes = [
             .then(m => m.Profile)
       },
 
+      // JOBS
       {
         path: 'jobs',
         loadComponent: () =>
@@ -52,6 +44,7 @@ export const routes: Routes = [
             .then(m => m.Jobs)
       },
 
+      // APPLICATIONS
       {
         path: 'applications',
         loadComponent: () =>
@@ -59,19 +52,25 @@ export const routes: Routes = [
             .then(m => m.Applications)
       },
 
+      // AI MATCHING
       {
         path: 'recommendations',
         loadComponent: () =>
           import('./features/recommendations/recommendations')
             .then(m => m.Recommendations)
+      },
+
+      // DEFAULT
+      {
+        path: '',
+        redirectTo: 'dashboard',
+        pathMatch: 'full'
       }
 
     ]
   },
 
-  // =========================
-  // FALLBACK
-  // =========================
+  // NOT FOUND
   {
     path: '**',
     redirectTo: ''

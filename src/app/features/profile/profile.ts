@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import jsPDF from 'jspdf';
 
 @Component({
   standalone:true,
@@ -11,11 +12,9 @@ import { CommonModule } from '@angular/common';
 
     <div class="card">
 
-      <div class="avatar">
-        H
-      </div>
+      
 
-      <h2>Halima</h2>
+      <h2></h2>
 
       <p>
         AI Recruiter

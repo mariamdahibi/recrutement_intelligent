@@ -1,1 +1,36 @@
-<p>dashboard works!</p>
+<div *ngIf="loading" class="loader"></div>
+
+<div *ngIf="!loading">
+
+  <h1>🏢 Recruitment Dashboard</h1>
+
+  <div class="cards">
+
+    <div class="card">
+      <h2>{{ users.length }}</h2>
+      <p>Candidates</p>
+    </div>
+
+    <div class="card">
+      <h2>{{ jobs.length }}</h2>
+      <p>Jobs</p>
+    </div>
+
+    <div class="card">
+      <h2>{{ applications.length }}</h2>
+      <p>Applications</p>
+    </div>
+
+  </div>
+
+  <div class="chart-box">
+
+    <canvas
+      baseChart
+      [data]="barChartData"
+      [type]="'bar'">
+    </canvas>
+
+  </div>
+
+</div>

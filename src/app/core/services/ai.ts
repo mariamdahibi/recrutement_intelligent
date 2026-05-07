@@ -1,30 +1,40 @@
 import { Injectable } from '@angular/core';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn:'root'
 })
 export class AiService {
 
-  calculateScore(user: any, job: any): number {
-    if (!user.skills || !job.requirements) return 0;
+  calculateMatch(
+    candidateSkills:string[],
+    requiredSkills:string[]
+  ):number{
 
-    let match = 0;
+    if(
+      !candidateSkills.length ||
+      !requiredSkills.length
+    ){
+      return 0;
+    }
 
-    job.requirements.forEach((req: string) => {
-      if (user.skills.includes(req)) match++;
+    let matched = 0;
+
+    requiredSkills.forEach(skill=>{
+
+      if(
+        candidateSkills
+        .map(s=>s.toLowerCase())
+        .includes(skill.toLowerCase())
+      ){
+        matched++;
+      }
+
     });
 
-    return Math.round((match / job.requirements.length) * 100);
-  }
+    return Math.round(
+      (matched / requiredSkills.length) * 100
+    );
 
-  getRecommendations(user: any, jobs: any[]) {
-    return jobs
-      .map(job => ({
-        ...job,
-        score: this.calculateScore(user, job)
-      }))
-      .sort((a, b) => b.score - a.score)
-      .slice(0, 3);
   }
 
 }
