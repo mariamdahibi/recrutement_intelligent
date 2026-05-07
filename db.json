@@ -1,0 +1,45 @@
+{
+  "jobs": [
+    {
+      "id": 1,
+      "title": "Frontend Developer",
+      "skills": "Angular, TypeScript"
+    },
+
+    {
+      "id": 2,
+      "title": "Backend Developer",
+      "skills": "Java, Spring Boot"
+    }
+  ],
+
+  "candidates": [
+    {
+      "id": 1,
+      "name": "Halima",
+      "skills": "Angular, Java",
+      "score": 95
+    },
+
+    {
+      "id": 2,
+      "name": "Ali",
+      "skills": "Spring Boot",
+      "score": 80
+    }
+  ],
+
+  "recommendations": [
+    {
+      "id": 1,
+      "job": "Frontend Developer",
+      "match": 95
+    },
+
+    {
+      "id": 2,
+      "job": "Backend Developer",
+      "match": 80
+    }
+  ]
+}

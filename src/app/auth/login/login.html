@@ -1,0 +1,18 @@
+<div class="login-container">
+
+  <div class="login-card">
+    <h2>Sign in</h2>
+    <p class="subtitle">Stay updated on your professional world</p>
+
+    <input type="email" [(ngModel)]="email" placeholder="Email" />
+
+    <input type="password" [(ngModel)]="password" placeholder="Password" />
+
+    <button (click)="login()">Sign in</button>
+
+    <p class="error" *ngIf="error">{{ error }}</p>
+  </div>
+<button type="submit">
+  {{ loading ? 'Loading...' : 'Login' }}
+</button>
+</div>
