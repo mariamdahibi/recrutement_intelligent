@@ -1,0 +1,17 @@
+<div *ngIf="loading">Loading...</div>
+
+<div *ngIf="error">{{error}}</div>
+
+<div *ngIf="user && !loading">
+
+  <h2>👤 {{user.name}}</h2>
+
+  <p>{{user.email}}</p>
+
+  <p>{{user.role}}</p>
+
+  <button (click)="downloadPDF()">
+  Export PDF
+</button>
+
+</div>

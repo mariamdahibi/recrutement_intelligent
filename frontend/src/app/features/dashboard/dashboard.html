@@ -1,0 +1,35 @@
+<div *ngIf="loading">
+  Loading dashboard...
+</div>
+
+<div *ngIf="!loading">
+
+  <h2>Recruitment Dashboard</h2>
+
+  <div class="stats">
+
+    <div>
+      <h3>{{users.length}}</h3>
+      <p>Candidates</p>
+    </div>
+
+    <div>
+      <h3>{{jobs.length}}</h3>
+      <p>Jobs</p>
+    </div>
+
+    <div>
+      <h3>{{applications.length}}</h3>
+      <p>Applications</p>
+    </div>
+
+  </div>
+
+  <canvas
+    baseChart
+    [data]="chartData"
+    [options]="chartOptions"
+    [type]="'bar'">
+  </canvas>
+
+</div>

@@ -1,0 +1,19 @@
+<div *ngIf="loading">
+  AI Matching Loading...
+</div>
+
+<div *ngIf="!loading">
+
+  <h2>AI Job Matching</h2>
+
+  <div *ngFor="let job of matches" class="card">
+
+    <h3>{{job.title}}</h3>
+
+    <p>{{job.company}}</p>
+
+    <strong>{{job.score}}%</strong>
+
+  </div>
+
+</div>

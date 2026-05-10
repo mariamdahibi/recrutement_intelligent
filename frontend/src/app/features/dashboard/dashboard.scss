@@ -1,0 +1,35 @@
+.cards{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
+  gap:20px;
+  margin-bottom:30px;
+}
+
+.card{
+  background:white;
+  padding:30px;
+  border-radius:20px;
+}
+
+.chart-box{
+  background:white;
+  padding:30px;
+  border-radius:20px;
+}
+
+.loader{
+  border:6px solid #eee;
+  border-top:6px solid #2563eb;
+  width:50px;
+  height:50px;
+  border-radius:50%;
+  animation:spin 1s linear infinite;
+  margin:auto;
+  margin-top:100px;
+}
+
+@keyframes spin{
+  100%{
+    transform:rotate(360deg);
+  }
+}

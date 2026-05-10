@@ -1,0 +1,17 @@
+<div *ngIf="loading">
+  Loading applications...
+</div>
+
+<div *ngIf="!loading">
+
+  <h2>Applications</h2>
+
+  <div *ngFor="let app of applications" class="card">
+
+    <h3>{{app.name}}</h3>
+
+    <p>{{app.status}}</p>
+
+  </div>
+
+</div>

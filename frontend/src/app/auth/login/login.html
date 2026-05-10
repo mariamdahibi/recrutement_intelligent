@@ -1,0 +1,29 @@
+<div class="login-container">
+
+  <div class="login-card">
+
+    <h1>🤖 Recruitment IA</h1>
+
+    <input
+      type="email"
+      [(ngModel)]="email"
+      placeholder="Email"
+    />
+
+    <input
+      type="password"
+      [(ngModel)]="password"
+      placeholder="Password"
+    />
+
+    <button (click)="login()">
+      Login
+    </button>
+
+    <p *ngIf="error" class="error">
+      {{error}}
+    </p>
+
+  </div>
+
+</div>

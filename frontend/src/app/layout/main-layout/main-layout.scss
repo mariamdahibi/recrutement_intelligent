@@ -1,0 +1,38 @@
+.layout{
+  display:flex;
+  min-height:100vh;
+}
+
+.sidebar{
+  width:260px;
+  background:#111827;
+}
+
+.main{
+  flex:1;
+  background:#f3f4f6;
+}
+
+.content{
+  padding:30px;
+}
+@media (max-width: 768px){
+
+  .layout{
+    flex-direction: column;
+  }
+
+  .sidebar{
+    width: 100%;
+    height: auto;
+  }
+
+  .cards{
+    grid-template-columns: 1fr;
+  }
+
+  .profile{
+    grid-template-columns: 1fr;
+  }
+
+}

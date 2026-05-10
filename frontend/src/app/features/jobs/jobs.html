@@ -1,0 +1,9 @@
+<div *ngIf="loading">Loading jobs...</div>
+
+<div *ngFor="let job of jobs">
+
+  <h3>{{job.title}}</h3>
+
+  <p>{{job.description}}</p>
+
+</div>
