@@ -1,0 +1,14 @@
+services:
+  backend:
+    build: .
+    container_name: recrutement-backend
+    ports:
+      - "8080:8080"
+    depends_on:
+      - ai-service
+
+  ai-service:
+    build: ./ai-service
+    container_name: recrutement-ai-service
+    ports:
+      - "8000:8000"
