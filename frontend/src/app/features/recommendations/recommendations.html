@@ -1,0 +1,219 @@
+<div class="ai-page">
+
+  <div *ngIf="loading" class="loading-card">
+    <div class="loader"></div>
+    <p>Analyse IA en cours...</p>
+  </div>
+
+  <div *ngIf="error && !loading" class="error-card">
+    {{ error }}
+  </div>
+
+  <ng-container *ngIf="!loading && !error">
+
+    <section class="hero">
+
+      <div class="hero-left">
+
+        <span class="role-badge">
+          {{ getRoleLabel() }}
+        </span>
+
+        <h1>
+          🤖 {{ getPageTitle() }}
+        </h1>
+
+        <p>
+          {{ getPageSubtitle() }}
+        </p>
+
+      </div>
+
+      <div class="hero-stats">
+
+        <div class="hero-stat">
+          <span>{{ filteredMatches.length }}</span>
+          <p>Matchs analysés</p>
+        </div>
+
+        <div class="hero-stat">
+          <span>{{ averageScore }}%</span>
+          <p>Score moyen</p>
+        </div>
+
+        <div class="hero-stat">
+          <span>{{ bestScore }}%</span>
+          <p>Meilleur score</p>
+        </div>
+
+      </div>
+
+    </section>
+
+    <section class="toolbar">
+
+      <div class="search-box">
+        <span>🔍</span>
+        <input
+          type="text"
+          [(ngModel)]="searchText"
+          placeholder="Rechercher candidat, poste ou compétence..."
+        />
+      </div>
+
+      <select [(ngModel)]="selectedJob">
+        <option value="ALL">Tous les postes</option>
+        <option
+          *ngFor="let job of availableJobs"
+          [value]="job"
+        >
+          {{ job }}
+        </option>
+      </select>
+
+      <button
+        class="reset-btn"
+        (click)="resetFilters()"
+      >
+        Réinitialiser
+      </button>
+
+    </section>
+
+    <section class="role-actions">
+
+      <div class="action-card" *ngIf="role === 'USER'">
+        <h3>🎯 Candidat</h3>
+        <p>Consulte tes offres compatibles et améliore tes compétences.</p>
+        <a routerLink="/app/jobs">Voir les offres</a>
+      </div>
+
+      <div class="action-card" *ngIf="role === 'RECRUITER'">
+        <h3>💼 Recruteur</h3>
+        <p>Identifie les meilleurs profils pour chaque poste disponible.</p>
+        <a routerLink="/app/applications">Voir candidatures</a>
+      </div>
+
+      <div class="action-card" *ngIf="role === 'ADMIN'">
+        <h3>🛡️ Admin</h3>
+        <p>Supervise les utilisateurs, les offres et les résultats IA.</p>
+        <a routerLink="/app/admin/users">Gérer utilisateurs</a>
+      </div>
+
+    </section>
+
+    <section class="matches-section">
+
+      <div class="section-header">
+        <h2>Résultats du matching</h2>
+        <p>{{ filteredMatches.length }} résultat(s) trouvé(s)</p>
+      </div>
+
+      <div *ngIf="filteredMatches.length === 0" class="empty-card">
+        Aucun résultat trouvé.
+      </div>
+
+      <div class="matches-grid">
+
+        <article
+          class="match-card"
+          *ngFor="let match of filteredMatches"
+        >
+
+          <div class="card-top">
+
+            <div class="candidate-info">
+
+              <div class="candidate-avatar">
+                {{ match.candidateName.charAt(0) }}
+              </div>
+
+              <div>
+                <h3>{{ match.candidateName }}</h3>
+                <p>{{ match.candidateEmail || 'Candidat' }}</p>
+              </div>
+
+            </div>
+
+            <div
+              class="score-pill"
+              [ngClass]="getScoreClass(match.score)"
+            >
+              {{ match.score }}%
+            </div>
+
+          </div>
+
+          <div class="job-box">
+
+            <span>Poste recommandé</span>
+
+            <h4>{{ match.jobTitle }}</h4>
+
+            <p *ngIf="match.company">
+              {{ match.company }}
+            </p>
+
+          </div>
+
+          <div class="progress">
+            <div
+              class="progress-fill"
+              [style.width.%]="match.score"
+              [ngClass]="getScoreClass(match.score)">
+            </div>
+          </div>
+
+          <div class="skills-block">
+
+            <div>
+              <h5>Compétences correspondantes</h5>
+
+              <div class="chips">
+                <span
+                  class="chip success"
+                  *ngFor="let skill of match.matchedSkills"
+                >
+                  {{ skill }}
+                </span>
+
+                <span
+                  class="chip empty"
+                  *ngIf="match.matchedSkills.length === 0"
+                >
+                  Aucune
+                </span>
+              </div>
+            </div>
+
+            <div>
+              <h5>Compétences à améliorer</h5>
+
+              <div class="chips">
+                <span
+                  class="chip warning"
+                  *ngFor="let skill of match.missingSkills"
+                >
+                  {{ skill }}
+                </span>
+
+                <span
+                  class="chip success"
+                  *ngIf="match.missingSkills.length === 0"
+                >
+                  Profil complet
+                </span>
+              </div>
+            </div>
+
+          </div>
+
+        </article>
+
+      </div>
+
+    </section>
+
+  </ng-container>
+
+</div>

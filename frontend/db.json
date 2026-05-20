@@ -1,0 +1,89 @@
+{
+  "users": [
+    {
+      "id": 1,
+      "name": "Admin",
+      "email": "admin@gmail.com",
+      "password": "1234",
+      "role": "ADMIN"
+    },
+    {
+      "id": 2,
+      "name": "Recruiter",
+      "email": "recruiter@gmail.com",
+      "password": "1234",
+      "role": "RECRUITER"
+    },
+    {
+      "id": 3,
+      "name": "Candidate",
+      "email": "candidate@gmail.com",
+      "password": "1234",
+      "role": "USER"
+    }
+  ],
+  "jobs": [
+    {
+      "id": 1,
+      "title": "Frontend Developer",
+      "company": "Tech Company",
+      "description": "Développement d'interfaces web avec Angular",
+      "location": "Casablanca",
+      "skills": "Angular, TypeScript"
+    },
+    {
+      "id": 2,
+      "title": "Backend Developer",
+      "company": "Software Company",
+      "description": "Développement d'API REST avec Java Spring Boot",
+      "location": "Rabat",
+      "skills": "Java, Spring Boot"
+    }
+  ],
+  "candidates": [
+    {
+      "id": 1,
+      "name": "Candidate",
+      "email": "candidate@gmail.com",
+      "skills": "Angular, Java",
+      "score": 95
+    },
+    {
+      "id": 2,
+      "name": "Ali",
+      "email": "ali@gmail.com",
+      "skills": "Spring Boot",
+      "score": 80
+    }
+  ],
+  "applications": [
+    {
+      "id": 1,
+      "candidate": "Candidate",
+      "job": "Frontend Developer",
+      "status": "Accepted",
+      "score": 95
+    },
+    {
+      "id": 2,
+      "candidate": "Ali",
+      "job": "Backend Developer",
+      "status": "Pending",
+      "score": 80
+    }
+  ],
+  "recommendations": [
+    {
+      "id": 1,
+      "candidate": "Candidate",
+      "job": "Frontend Developer",
+      "match": 95
+    },
+    {
+      "id": 2,
+      "candidate": "Ali",
+      "job": "Backend Developer",
+      "match": 80
+    }
+  ]
+}

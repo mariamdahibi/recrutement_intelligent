@@ -1,0 +1,259 @@
+.profile-page {
+  padding: 8px;
+}
+
+.profile-hero {
+  background: linear-gradient(135deg, #ffffff, #f8fbff);
+  border-radius: 30px;
+  padding: 34px;
+  display: flex;
+  justify-content: space-between;
+  gap: 30px;
+  margin-bottom: 28px;
+  box-shadow: 0 18px 40px rgba(15, 23, 42, 0.08);
+}
+
+.hero-content h1 {
+  margin: 14px 0 0;
+  font-size: 36px;
+  color: #111827;
+}
+
+.hero-content p {
+  margin-top: 10px;
+  color: #6b7280;
+  font-size: 16px;
+  line-height: 1.6;
+}
+
+.role-badge {
+  display: inline-block;
+  background: #e0ecff;
+  color: #2563eb;
+  padding: 8px 15px;
+  border-radius: 999px;
+  font-weight: 800;
+  font-size: 13px;
+}
+
+.hero-card {
+  min-width: 260px;
+  background: white;
+  border-radius: 24px;
+  padding: 24px;
+  text-align: center;
+  border: 1px solid #e5e7eb;
+}
+
+.hero-avatar {
+  width: 76px;
+  height: 76px;
+  margin: 0 auto 14px;
+  border-radius: 24px;
+  background: #2563eb;
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 32px;
+  font-weight: 900;
+}
+
+.hero-card h2 {
+  margin: 0;
+  color: #111827;
+}
+
+.hero-card p {
+  margin-top: 6px;
+  color: #6b7280;
+}
+
+.profile-grid {
+  display: grid;
+  grid-template-columns: 1.6fr 0.8fr;
+  gap: 26px;
+}
+
+.profile-card,
+.action-panel {
+  background: white;
+  border-radius: 28px;
+  padding: 30px;
+  box-shadow: 0 18px 40px rgba(15, 23, 42, 0.08);
+}
+
+.profile-header {
+  display: flex;
+  align-items: center;
+  gap: 18px;
+  margin-bottom: 28px;
+}
+
+.main-avatar {
+  width: 72px;
+  height: 72px;
+  border-radius: 22px;
+  background: #2563eb;
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 30px;
+  font-weight: 900;
+}
+
+.profile-header h2 {
+  margin: 0;
+  color: #111827;
+  font-size: 28px;
+}
+
+.profile-header p {
+  margin-top: 6px;
+  color: #6b7280;
+}
+
+.info-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 18px;
+  margin-bottom: 26px;
+}
+
+.info-box {
+  background: #f8fafc;
+  padding: 20px;
+  border-radius: 20px;
+}
+
+.info-box span {
+  display: block;
+  color: #6b7280;
+  font-size: 13px;
+  font-weight: 700;
+  margin-bottom: 8px;
+}
+
+.info-box strong {
+  color: #111827;
+  font-size: 18px;
+}
+
+.skills-section {
+  margin-bottom: 26px;
+}
+
+.skills-section h3,
+.action-panel h3 {
+  margin: 0 0 16px;
+  color: #111827;
+  font-size: 22px;
+}
+
+.skills-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.skill-chip {
+  background: #e0ecff;
+  color: #2563eb;
+  padding: 9px 13px;
+  border-radius: 999px;
+  font-size: 13px;
+  font-weight: 800;
+}
+
+.skill-chip.empty {
+  background: #fee2e2;
+  color: #dc2626;
+}
+
+.progress-section {
+  margin-bottom: 28px;
+}
+
+.progress-title {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 10px;
+  color: #374151;
+  font-weight: 700;
+}
+
+.progress {
+  height: 12px;
+  background: #e5e7eb;
+  border-radius: 999px;
+  overflow: hidden;
+}
+
+.progress-fill {
+  height: 100%;
+  background: #2563eb;
+  border-radius: 999px;
+}
+
+.pdf-btn {
+  border: none;
+  border-radius: 16px;
+  background: linear-gradient(135deg, #2563eb, #1d4ed8);
+  color: white;
+  padding: 14px 22px;
+  font-weight: 800;
+  cursor: pointer;
+  box-shadow: 0 12px 25px rgba(37, 99, 235, 0.24);
+}
+
+.pdf-btn:hover {
+  transform: translateY(-2px);
+}
+
+.actions {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.actions a {
+  background: #f8fafc;
+  color: #111827;
+  padding: 16px;
+  border-radius: 18px;
+  font-weight: 800;
+  transition: 0.2s ease;
+}
+
+.actions a:hover {
+  background: #e0ecff;
+  color: #2563eb;
+}
+
+.loading-card,
+.error-card {
+  background: white;
+  padding: 24px;
+  border-radius: 22px;
+  box-shadow: 0 12px 30px rgba(15, 23, 42, 0.06);
+}
+
+.error-card {
+  background: #fee2e2;
+  color: #dc2626;
+}
+
+@media (max-width: 950px) {
+  .profile-hero {
+    flex-direction: column;
+  }
+
+  .profile-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .info-grid {
+    grid-template-columns: 1fr;
+  }
+}
