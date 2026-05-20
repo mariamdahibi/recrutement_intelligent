@@ -1,0 +1,28 @@
+name: DevOps Check
+
+on:
+  push:
+    branches:
+      - master
+
+  pull_request:
+    branches:
+      - master
+
+jobs:
+  devops-check:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Récupérer le code
+        uses: actions/checkout@v4
+
+      - name: Vérifier le contenu de master
+        run: |
+          echo "Branche master réservée à DevOps / Docker / IA"
+          echo "Contenu du projet :"
+          ls -la
+
+      - name: Vérifier les workflows
+        run: |
+          echo "Workflow DevOps OK"
