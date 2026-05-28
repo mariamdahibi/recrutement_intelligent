@@ -1,36 +1,247 @@
-<div *ngIf="loading" class="loader"></div>
+<div class="page dashboard-page">
 
-<div *ngIf="!loading">
-
-  <h1>🏢 Recruitment Dashboard</h1>
-
-  <div class="cards">
-
-    <div class="card">
-      <h2>{{ users.length }}</h2>
-      <p>Candidates</p>
-    </div>
-
-    <div class="card">
-      <h2>{{ jobs.length }}</h2>
-      <p>Jobs</p>
-    </div>
-
-    <div class="card">
-      <h2>{{ applications.length }}</h2>
-      <p>Applications</p>
-    </div>
-
+  <div *ngIf="loading" class="skeleton-list">
+    <div class="skeleton skeleton-line"></div>
+    <div class="skeleton skeleton-card"></div>
+    <div class="skeleton skeleton-card"></div>
   </div>
 
-  <div class="chart-box">
-
-    <canvas
-      baseChart
-      [data]="barChartData"
-      [type]="'bar'">
-    </canvas>
-
+  <div *ngIf="error && !loading" class="error-card">
+    {{ error }}
   </div>
+
+  <ng-container *ngIf="!loading && !error">
+
+    <section class="dashboard-hero">
+
+      <div>
+        <span class="badge">
+          {{ isCandidate() ? 'Espace candidat' : 'Espace recruteur' }}
+        </span>
+
+        <h1>
+          {{ isCandidate() ? 'Bienvenue dans votre espace candidat' : 'Dashboard Recruteur' }}
+        </h1>
+
+        <p>
+          {{ isCandidate()
+            ? 'Suivez vos candidatures, consultez les offres recommandées et améliorez votre profil.'
+            : 'Suivez les offres, candidatures et recommandations IA.'
+          }}
+        </p>
+
+        <div class="hero-actions">
+          <a
+            routerLink="/app/jobs"
+            class="btn-primary"
+          >
+            💼 Voir les offres
+          </a>
+
+          <a
+            *ngIf="isCandidate()"
+            routerLink="/app/upload-cv"
+            class="btn-secondary"
+          >
+            📄 Analyser mon CV
+          </a>
+        </div>
+      </div>
+
+      <div class="hero-profile" *ngIf="currentUser">
+        <div class="profile-avatar">
+          {{ currentUser.name.charAt(0) }}
+        </div>
+
+        <h2>{{ currentUser.name }}</h2>
+        <p>{{ currentUser.email }}</p>
+      </div>
+
+    </section>
+
+    <section class="stats-grid" *ngIf="isCandidate()">
+
+      <article class="stat-card">
+        <span>📨</span>
+        <div>
+          <h3>{{ getCandidateApplications().length }}</h3>
+          <p>Mes candidatures</p>
+        </div>
+      </article>
+
+      <article class="stat-card">
+        <span>⏳</span>
+        <div>
+          <h3>{{ getPendingCount() }}</h3>
+          <p>En attente</p>
+        </div>
+      </article>
+
+      <article class="stat-card">
+        <span>📅</span>
+        <div>
+          <h3>{{ getInterviewCount() }}</h3>
+          <p>Entretiens</p>
+        </div>
+      </article>
+
+      <article class="stat-card">
+        <span>🤖</span>
+        <div>
+          <h3>{{ getAverageScore() }}%</h3>
+          <p>Score IA moyen</p>
+        </div>
+      </article>
+
+    </section>
+
+    <section class="stats-grid" *ngIf="!isCandidate()">
+
+      <article class="stat-card">
+        <span>👥</span>
+        <div>
+          <h3>{{ users.length }}</h3>
+          <p>Utilisateurs</p>
+        </div>
+      </article>
+
+      <article class="stat-card">
+        <span>💼</span>
+        <div>
+          <h3>{{ jobs.length }}</h3>
+          <p>Offres</p>
+        </div>
+      </article>
+
+      <article class="stat-card">
+        <span>📨</span>
+        <div>
+          <h3>{{ applications.length }}</h3>
+          <p>Candidatures</p>
+        </div>
+      </article>
+
+      <article class="stat-card">
+        <span>🤖</span>
+        <div>
+          <h3>{{ recommendations.length }}</h3>
+          <p>Recommandations IA</p>
+        </div>
+      </article>
+
+    </section>
+
+    <section class="dashboard-grid" *ngIf="isCandidate()">
+
+      <article class="card">
+
+        <h2>🎯 Offres recommandées pour vous</h2>
+
+        <div
+          class="empty-state"
+          *ngIf="getRecommendedJobs().length === 0"
+        >
+          <span class="icon">💼</span>
+          <h3>Aucune offre disponible</h3>
+          <p>Les offres adaptées à votre profil apparaîtront ici.</p>
+        </div>
+
+        <div
+          class="recommended-job"
+          *ngFor="let job of getRecommendedJobs()"
+        >
+
+          <div>
+            <h3>{{ job.title }}</h3>
+            <p>{{ job.company || 'Entreprise non renseignée' }}</p>
+            <small>📍 {{ job.location || 'Localisation non renseignée' }}</small>
+          </div>
+
+          <div class="score-pill">
+            {{ calculateJobScore(job) }}%
+          </div>
+
+        </div>
+
+      </article>
+
+      <article class="card">
+
+        <h2>📨 Mes dernières candidatures</h2>
+
+        <div
+          class="empty-state"
+          *ngIf="getRecentApplications().length === 0"
+        >
+          <span class="icon">📭</span>
+          <h3>Aucune candidature</h3>
+          <p>Postulez à une offre pour suivre votre avancement.</p>
+        </div>
+
+        <div
+          class="application-row"
+          *ngFor="let application of getRecentApplications()"
+        >
+
+          <div>
+            <h3>{{ getJobTitle(application) }}</h3>
+            <p>Score IA : {{ application.score || 0 }}%</p>
+          </div>
+
+          <span
+            class="status"
+            [ngClass]="getStatusClass(application.status)"
+          >
+            {{ getStatusLabel(application.status) }}
+          </span>
+
+        </div>
+
+        <a
+          routerLink="/app/my-applications"
+          class="btn-secondary full-btn"
+        >
+          Voir toutes mes candidatures
+        </a>
+
+      </article>
+
+    </section>
+
+    <section class="card quick-actions" *ngIf="isCandidate()">
+
+      <h2>Actions rapides</h2>
+
+      <div class="actions-grid">
+
+        <a routerLink="/app/jobs" class="action-card">
+          <span>💼</span>
+          <strong>Consulter les offres</strong>
+          <p>Trouvez les postes qui correspondent à votre profil.</p>
+        </a>
+
+        <a routerLink="/app/my-applications" class="action-card">
+          <span>📨</span>
+          <strong>Mes candidatures</strong>
+          <p>Suivez l’état de traitement de vos demandes.</p>
+        </a>
+
+        <a routerLink="/app/upload-cv" class="action-card">
+          <span>📄</span>
+          <strong>Analyser mon CV</strong>
+          <p>Détectez vos compétences et améliorez votre profil.</p>
+        </a>
+
+        <a routerLink="/app/recommendations" class="action-card">
+          <span>🤖</span>
+          <strong>AI Matching</strong>
+          <p>Consultez vos recommandations intelligentes.</p>
+        </a>
+
+      </div>
+
+    </section>
+
+  </ng-container>
 
 </div>

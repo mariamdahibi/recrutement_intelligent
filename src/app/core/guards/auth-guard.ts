@@ -1,19 +1,38 @@
-// src/app/core/guards/auth-guard.ts - CORRECT
-import { inject, PLATFORM_ID } from '@angular/core';
-import { CanActivateFn, Router } from '@angular/router';
-import { isPlatformBrowser } from '@angular/common';
+import { inject } from '@angular/core';
+import {
+  CanActivateFn,
+  Router
+} from '@angular/router';
 
-export const authGuard: CanActivateFn = () => {
+export const authGuard: CanActivateFn = (route) => {
+
   const router = inject(Router);
-  const platformId = inject(PLATFORM_ID);
 
-  if (isPlatformBrowser(platformId)) {
-    const token = localStorage.getItem('token');
-    if (token) {
-      return true;
-    }
+  const userData = localStorage.getItem('user');
+
+  if (!userData) {
+    return router.createUrlTree(['/login']);
   }
 
-  router.navigate(['/']);
-  return false;
+  let user: any;
+
+  try {
+    user = JSON.parse(userData);
+  } catch {
+    localStorage.removeItem('user');
+    return router.createUrlTree(['/login']);
+  }
+
+  const currentRole = user.role === 'CANDIDATE' ? 'USER' : user.role;
+  const allowedRoles = route.data?.['roles'] as string[] | undefined;
+
+  if (
+    allowedRoles &&
+    allowedRoles.length > 0 &&
+    !allowedRoles.includes(currentRole)
+  ) {
+    return router.createUrlTree(['/app/dashboard']);
+  }
+
+  return true;
 };

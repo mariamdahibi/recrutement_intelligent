@@ -1,0 +1,170 @@
+<div class="page admin-logs-page">
+
+  <div *ngIf="loading" class="skeleton-list">
+    <div class="skeleton skeleton-line"></div>
+    <div class="skeleton skeleton-card"></div>
+  </div>
+
+  <div *ngIf="error && !loading" class="error-card">
+    {{ error }}
+  </div>
+
+  <ng-container *ngIf="!loading && !error">
+
+    <section class="logs-hero">
+
+      <div>
+        <span class="badge">Journal d’activité</span>
+
+        <h1>📜 Logs Admin</h1>
+
+        <p>
+          Consultez l’historique des actions importantes effectuées sur la plateforme.
+        </p>
+      </div>
+
+      <div class="hero-icon">
+        📜
+      </div>
+
+    </section>
+
+    <section class="stats-grid">
+
+      <article class="stat-card">
+        <span>📜</span>
+        <div>
+          <h3>{{ logs.length }}</h3>
+          <p>Total logs</p>
+        </div>
+      </article>
+
+      <article class="stat-card">
+        <span>👤</span>
+        <div>
+          <h3>{{ getUserLogsCount() }}</h3>
+          <p>Utilisateurs</p>
+        </div>
+      </article>
+
+      <article class="stat-card">
+        <span>💼</span>
+        <div>
+          <h3>{{ getJobLogsCount() }}</h3>
+          <p>Offres</p>
+        </div>
+      </article>
+
+      <article class="stat-card">
+        <span>📨</span>
+        <div>
+          <h3>{{ getApplicationLogsCount() }}</h3>
+          <p>Candidatures</p>
+        </div>
+      </article>
+
+    </section>
+
+    <section class="toolbar-card">
+
+      <div class="filter-group">
+        <label>Type de log</label>
+
+        <select
+          class="input-control"
+          [(ngModel)]="typeFilter"
+        >
+          <option value="ALL">Tous les types</option>
+          <option value="USER">Utilisateurs</option>
+          <option value="JOB">Offres</option>
+          <option value="APPLICATION">Candidatures</option>
+          <option value="SYSTEM">Système</option>
+        </select>
+      </div>
+
+      <div class="result-count">
+        {{ filteredLogs.length }} résultat(s)
+      </div>
+
+    </section>
+
+    <div
+      class="empty-state"
+      *ngIf="filteredLogs.length === 0"
+    >
+      <span class="icon">📭</span>
+      <h3>Aucun log trouvé</h3>
+      <p>Les actions admin apparaîtront ici automatiquement.</p>
+    </div>
+
+    <section
+      class="logs-list"
+      *ngIf="filteredLogs.length > 0"
+    >
+
+      <article
+        class="log-card"
+        *ngFor="let log of paginatedLogs"
+      >
+
+        <div
+          class="log-type"
+          [ngClass]="getLogClass(log.type)"
+        >
+          {{ getLogIcon(log.type) }}
+        </div>
+
+        <div class="log-content">
+
+          <h2>{{ log.action }}</h2>
+
+          <p>
+            Acteur :
+            <strong>{{ log.actor || 'Système' }}</strong>
+          </p>
+
+          <p *ngIf="log.target">
+            Cible :
+            <strong>{{ log.target }}</strong>
+          </p>
+
+          <small>
+            {{ log.createdAt | date:'medium' }}
+          </small>
+
+        </div>
+
+        <span class="log-badge">
+          {{ log.type }}
+        </span>
+
+      </article>
+
+    </section>
+
+    <div
+      class="pagination"
+      *ngIf="filteredLogs.length > 0"
+    >
+
+      <button
+        (click)="previousPage()"
+        [disabled]="page === 1"
+      >
+        Précédent
+      </button>
+
+      <span>Page {{ page }} / {{ totalPages }}</span>
+
+      <button
+        (click)="nextPage()"
+        [disabled]="page === totalPages"
+      >
+        Suivant
+      </button>
+
+    </div>
+
+  </ng-container>
+
+</div>

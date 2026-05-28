@@ -1,0 +1,193 @@
+<div class="page my-applications-page">
+
+  <div *ngIf="loading" class="skeleton-list">
+    <div class="skeleton skeleton-line"></div>
+    <div class="skeleton skeleton-card"></div>
+    <div class="skeleton skeleton-card"></div>
+  </div>
+
+  <div *ngIf="error && !loading" class="error-card">
+    {{ error }}
+  </div>
+
+  <ng-container *ngIf="!loading && !error">
+
+    <section class="my-applications-hero">
+
+      <div>
+        <span class="badge">Espace candidat</span>
+
+        <h1>📨 Mes candidatures</h1>
+
+        <p>
+          Suivez les offres auxquelles vous avez postulé et consultez l’état de traitement.
+        </p>
+      </div>
+
+      <div class="hero-icon">
+        📬
+      </div>
+
+    </section>
+
+    <section class="stats-grid">
+
+      <article class="stat-card">
+        <span>📨</span>
+        <div>
+          <h3>{{ applications.length }}</h3>
+          <p>Total</p>
+        </div>
+      </article>
+
+      <article class="stat-card">
+        <span>⏳</span>
+        <div>
+          <h3>{{ getPendingCount() }}</h3>
+          <p>En attente</p>
+        </div>
+      </article>
+
+      <article class="stat-card">
+        <span>✅</span>
+        <div>
+          <h3>{{ getAcceptedCount() }}</h3>
+          <p>Acceptées</p>
+        </div>
+      </article>
+
+      <article class="stat-card">
+        <span>❌</span>
+        <div>
+          <h3>{{ getRejectedCount() }}</h3>
+          <p>Refusées</p>
+        </div>
+      </article>
+
+    </section>
+
+    <section class="toolbar-card">
+
+      <div class="filter-group">
+        <label>Filtrer par statut</label>
+
+        <select
+          class="input-control"
+          [(ngModel)]="statusFilter"
+        >
+          <option value="ALL">Tous les statuts</option>
+          <option value="PENDING">En attente</option>
+          <option value="ACCEPTED">Acceptées</option>
+          <option value="REJECTED">Refusées</option>
+        </select>
+      </div>
+
+      <div class="result-count">
+        {{ filteredApplications.length }} résultat(s)
+      </div>
+
+    </section>
+
+    <div
+      class="empty-state"
+      *ngIf="filteredApplications.length === 0"
+    >
+      <span class="icon">📭</span>
+      <h3>Aucune candidature trouvée</h3>
+      <p>
+        Consultez les offres disponibles et postulez aux postes adaptés à votre profil.
+      </p>
+    </div>
+
+    <section
+      class="my-applications-grid"
+      *ngIf="filteredApplications.length > 0"
+    >
+
+      <article
+        class="my-application-card"
+        *ngFor="let application of paginatedApplications"
+      >
+
+        <div class="card-top">
+
+          <div class="job-icon">
+            💼
+          </div>
+
+          <div>
+            <h2>{{ getJobTitle(application) }}</h2>
+            <p>{{ getCompany(application) }}</p>
+          </div>
+
+        </div>
+
+        <div class="job-box">
+
+          <p class="description">
+            {{ getDescription(application) }}
+          </p>
+
+          <p class="location">
+            📍 {{ getLocation(application) }}
+          </p>
+
+        </div>
+
+        <div class="score-box">
+
+          <div>
+            <span>Score IA</span>
+            <strong>{{ getScore(application) }}%</strong>
+          </div>
+
+          <div class="score-bar">
+            <div
+              class="score-progress"
+              [style.width.%]="getScore(application)"
+            ></div>
+          </div>
+
+        </div>
+
+        <div class="status-row">
+
+          <span
+            class="status"
+            [ngClass]="getStatusClass(application.status)"
+          >
+            {{ getStatusLabel(application.status) }}
+          </span>
+
+        </div>
+
+      </article>
+
+    </section>
+
+    <div
+      class="pagination"
+      *ngIf="filteredApplications.length > 0"
+    >
+
+      <button
+        (click)="previousPage()"
+        [disabled]="page === 1"
+      >
+        Précédent
+      </button>
+
+      <span>Page {{ page }} / {{ totalPages }}</span>
+
+      <button
+        (click)="nextPage()"
+        [disabled]="page === totalPages"
+      >
+        Suivant
+      </button>
+
+    </div>
+
+  </ng-container>
+
+</div>

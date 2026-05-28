@@ -1,1 +1,194 @@
-<p>jobs works!</p>
+<div class="page jobs-page">
+
+  <div *ngIf="loading" class="skeleton-list">
+    <div class="skeleton skeleton-line"></div>
+    <div class="skeleton skeleton-card"></div>
+    <div class="skeleton skeleton-card"></div>
+  </div>
+
+  <div *ngIf="error && !loading" class="error-card">
+    {{ error }}
+  </div>
+
+  <ng-container *ngIf="!loading && !error">
+
+    <section class="page-hero jobs-hero">
+
+      <div>
+        <span class="badge">Offres d’emploi</span>
+
+        <h1>💼 Jobs</h1>
+
+        <p *ngIf="canManageJobs()">
+          Publiez, consultez et gérez les offres d’emploi disponibles.
+        </p>
+
+        <p *ngIf="isCandidate()">
+          Consultez les offres disponibles et postulez aux postes adaptés à votre profil.
+        </p>
+      </div>
+
+      <button
+        *ngIf="canManageJobs()"
+        class="btn-primary"
+        (click)="openAddModal()"
+      >
+        ➕ Ajouter une offre
+      </button>
+
+    </section>
+
+    <div
+      class="empty-state"
+      *ngIf="filteredJobs.length === 0"
+    >
+      <span class="icon">💼</span>
+      <h3>Aucune offre trouvée</h3>
+      <p>Essayez une autre recherche.</p>
+    </div>
+
+    <section class="jobs-grid">
+
+      <article
+        class="job-card"
+        *ngFor="let job of paginatedJobs"
+      >
+
+        <div class="job-top">
+          <div class="job-icon">💼</div>
+
+          <div>
+            <h2>{{ job.title }}</h2>
+            <p>{{ job.company || 'Entreprise non renseignée' }}</p>
+          </div>
+        </div>
+
+        <p class="description">
+          {{ job.description }}
+        </p>
+
+        <div class="location">
+          📍 {{ job.location || 'Localisation non renseignée' }}
+        </div>
+
+        <div class="skills">
+          <span *ngFor="let skill of getSkills(job)">
+            {{ skill }}
+          </span>
+        </div>
+
+        <div class="job-actions">
+
+          <a
+            class="btn-secondary"
+            [routerLink]="['/app/jobs', job.id]"
+          >
+            Voir détail
+          </a>
+
+          <button
+            *ngIf="isCandidate() && !hasAlreadyApplied(job)"
+            class="btn-primary"
+            (click)="applyToJob(job)"
+          >
+            Postuler
+          </button>
+
+          <button
+            *ngIf="isCandidate() && hasAlreadyApplied(job)"
+            class="btn-secondary"
+            disabled
+          >
+            Déjà postulé
+          </button>
+
+          <button
+            *ngIf="canManageJobs()"
+            class="btn-danger"
+            (click)="askDelete(job)"
+          >
+            Supprimer
+          </button>
+
+        </div>
+
+      </article>
+
+    </section>
+
+    <div class="pagination" *ngIf="filteredJobs.length > 0">
+
+      <button
+        (click)="previousPage()"
+        [disabled]="page === 1"
+      >
+        Précédent
+      </button>
+
+      <span>Page {{ page }} / {{ totalPages }}</span>
+
+      <button
+        (click)="nextPage()"
+        [disabled]="page === totalPages"
+      >
+        Suivant
+      </button>
+
+    </div>
+
+  </ng-container>
+
+  <div
+    class="modal-backdrop"
+    *ngIf="showAddModal && canManageJobs()"
+  >
+
+    <div class="modal">
+
+      <h2>➕ Ajouter une offre</h2>
+
+      <div class="modal-form">
+        <input class="input-control" [(ngModel)]="newJob.title" placeholder="Titre du poste" />
+        <input class="input-control" [(ngModel)]="newJob.company" placeholder="Entreprise" />
+        <input class="input-control" [(ngModel)]="newJob.location" placeholder="Localisation" />
+        <input class="input-control" [(ngModel)]="newJob.skills" placeholder="Compétences demandées" />
+
+        <textarea
+          class="input-control description-input"
+          [(ngModel)]="newJob.description"
+          placeholder="Description de l’offre">
+        </textarea>
+      </div>
+
+      <div class="modal-actions">
+        <button class="btn-secondary" (click)="closeAddModal()">Annuler</button>
+        <button class="btn-primary" (click)="addJob()">Publier</button>
+      </div>
+
+    </div>
+
+  </div>
+
+  <div
+    class="modal-backdrop"
+    *ngIf="showDeleteModal && canManageJobs()"
+  >
+
+    <div class="modal">
+
+      <h2>⚠️ Confirmation</h2>
+
+      <p>
+        Voulez-vous vraiment supprimer cette offre ?
+      </p>
+
+      <div class="modal-actions">
+        <button class="btn-secondary" (click)="cancelDelete()">Annuler</button>
+        <button class="btn-danger" (click)="confirmDelete()">Supprimer</button>
+      </div>
+
+    </div>
+
+  </div>
+
+</div>

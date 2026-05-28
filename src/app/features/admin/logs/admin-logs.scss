@@ -1,0 +1,186 @@
+.admin-logs-page {
+  padding: 8px;
+}
+
+.logs-hero {
+  background:
+    radial-gradient(circle at 85% 20%, rgba(79, 70, 229, 0.18), transparent 34%),
+    linear-gradient(135deg, var(--card), rgba(79, 70, 229, 0.1));
+  border: 1px solid var(--border);
+  border-radius: 34px;
+  padding: 38px;
+  margin-bottom: 26px;
+  box-shadow: var(--shadow);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.logs-hero h1 {
+  margin: 14px 0 10px;
+  font-size: 42px;
+  color: var(--text);
+}
+
+.logs-hero p {
+  color: var(--muted);
+  font-weight: 600;
+}
+
+.hero-icon {
+  width: 110px;
+  height: 110px;
+  border-radius: 34px;
+  background: linear-gradient(135deg, var(--primary), var(--secondary));
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 46px;
+  box-shadow: var(--shadow);
+}
+
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 18px;
+  margin-bottom: 24px;
+}
+
+.stat-card,
+.toolbar-card,
+.log-card {
+  background: var(--card);
+  border: 1px solid var(--border);
+  box-shadow: var(--shadow);
+}
+
+.stat-card {
+  border-radius: 24px;
+  padding: 22px;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.stat-card span {
+  width: 54px;
+  height: 54px;
+  border-radius: 18px;
+  background: var(--bg);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 24px;
+}
+
+.stat-card h3 {
+  margin: 0;
+  font-size: 28px;
+  color: var(--text);
+}
+
+.stat-card p {
+  margin: 4px 0 0;
+  color: var(--muted);
+  font-weight: 800;
+}
+
+.toolbar-card {
+  border-radius: 26px;
+  padding: 22px 26px;
+  margin-bottom: 26px;
+  display: flex;
+  justify-content: space-between;
+  align-items: end;
+}
+
+.filter-group {
+  display: grid;
+  gap: 8px;
+}
+
+.filter-group label {
+  color: var(--muted);
+  font-weight: 900;
+}
+
+.result-count {
+  background: var(--bg);
+  color: var(--text);
+  padding: 14px 18px;
+  border-radius: 16px;
+  font-weight: 900;
+}
+
+.logs-list {
+  display: grid;
+  gap: 16px;
+}
+
+.log-card {
+  border-radius: 24px;
+  padding: 20px;
+  display: flex;
+  align-items: center;
+  gap: 18px;
+}
+
+.log-type {
+  width: 58px;
+  height: 58px;
+  border-radius: 20px;
+  background: var(--bg);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 24px;
+}
+
+.log-content {
+  flex: 1;
+}
+
+.log-content h2 {
+  margin: 0;
+  color: var(--text);
+  font-size: 20px;
+}
+
+.log-content p {
+  margin: 6px 0 0;
+  color: var(--muted);
+}
+
+.log-content small {
+  display: block;
+  margin-top: 8px;
+  color: var(--muted);
+  font-weight: 700;
+}
+
+.log-badge {
+  background: var(--primary-light);
+  color: var(--primary);
+  padding: 9px 14px;
+  border-radius: 999px;
+  font-weight: 900;
+  font-size: 12px;
+}
+
+@media (max-width: 900px) {
+  .logs-hero,
+  .toolbar-card,
+  .log-card {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .stats-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .logs-hero h1 {
+    font-size: 32px;
+  }
+}

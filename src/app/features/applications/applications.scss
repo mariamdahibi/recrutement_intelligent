@@ -1,0 +1,370 @@
+.recruiter-applications-page {
+  padding: 8px;
+}
+
+.recruiter-hero {
+  background:
+    radial-gradient(circle at 85% 20%, rgba(6, 182, 212, 0.18), transparent 34%),
+    linear-gradient(135deg, var(--card), rgba(79, 70, 229, 0.1));
+  border: 1px solid var(--border);
+  border-radius: 34px;
+  padding: 38px;
+  margin-bottom: 26px;
+  box-shadow: var(--shadow);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 24px;
+}
+
+.recruiter-hero h1 {
+  margin: 14px 0 10px;
+  font-size: 42px;
+  color: var(--text);
+}
+
+.recruiter-hero p {
+  color: var(--muted);
+  font-weight: 600;
+  line-height: 1.6;
+}
+
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(6, 1fr);
+  gap: 16px;
+  margin-bottom: 24px;
+}
+
+.stat-card {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 24px;
+  padding: 20px;
+  box-shadow: var(--shadow);
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+.stat-card span {
+  width: 48px;
+  height: 48px;
+  border-radius: 16px;
+  background: var(--bg);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 22px;
+}
+
+.stat-card h3 {
+  margin: 0;
+  font-size: 26px;
+  color: var(--text);
+}
+
+.stat-card p {
+  margin: 4px 0 0;
+  color: var(--muted);
+  font-weight: 800;
+  font-size: 12px;
+}
+
+.filters-panel {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 28px;
+  box-shadow: var(--shadow);
+  padding: 24px;
+  margin-bottom: 22px;
+  display: grid;
+  grid-template-columns: repeat(4, 1fr) auto;
+  gap: 18px;
+  align-items: end;
+}
+
+.filter-group {
+  display: grid;
+  gap: 8px;
+}
+
+.filter-group label {
+  color: var(--muted);
+  font-weight: 900;
+  font-size: 13px;
+}
+
+.result-count {
+  background: var(--bg);
+  color: var(--text);
+  padding: 15px 18px;
+  border-radius: 16px;
+  font-weight: 900;
+  white-space: nowrap;
+}
+
+.bulk-panel {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 24px;
+  padding: 18px 22px;
+  margin-bottom: 24px;
+  box-shadow: var(--shadow);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 14px;
+}
+
+.select-all {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-weight: 900;
+  color: var(--text);
+}
+
+.bulk-actions {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.bulk-actions span {
+  font-weight: 900;
+  color: var(--primary);
+  background: var(--primary-light);
+  padding: 10px 14px;
+  border-radius: 999px;
+}
+
+.applications-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(420px, 1fr));
+  gap: 24px;
+}
+
+.application-card {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 30px;
+  padding: 26px;
+  box-shadow: var(--shadow);
+  display: grid;
+  gap: 20px;
+  transition: 0.2s ease;
+}
+
+.application-card:hover {
+  transform: translateY(-4px);
+}
+
+.card-top {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+.selection-checkbox {
+  width: 18px;
+  height: 18px;
+}
+
+.candidate-avatar {
+  width: 58px;
+  height: 58px;
+  border-radius: 20px;
+  background: linear-gradient(135deg, var(--primary), var(--secondary));
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 22px;
+  font-weight: 900;
+}
+
+.candidate-info {
+  flex: 1;
+}
+
+.candidate-info h2 {
+  margin: 0;
+  color: var(--text);
+  font-size: 22px;
+}
+
+.candidate-info p {
+  margin: 5px 0 0;
+  color: var(--muted);
+  font-size: 13px;
+  font-weight: 700;
+}
+
+.status.shortlisted {
+  background: #ede9fe;
+  color: #6d28d9;
+}
+
+.status.interview {
+  background: #dbeafe;
+  color: #1d4ed8;
+}
+
+.job-box {
+  background: var(--bg);
+  border-radius: 22px;
+  padding: 20px;
+}
+
+.job-box span {
+  color: var(--primary);
+  font-weight: 900;
+  font-size: 13px;
+}
+
+.job-box h3 {
+  margin: 8px 0 10px;
+  color: var(--text);
+  font-size: 24px;
+}
+
+.company,
+.description,
+.location {
+  color: var(--muted);
+  margin: 8px 0;
+  line-height: 1.5;
+  font-weight: 600;
+}
+
+.score-card {
+  border-radius: 22px;
+  padding: 18px;
+}
+
+.score-card.excellent {
+  background: #dcfce7;
+}
+
+.score-card.good {
+  background: #eef2ff;
+}
+
+.score-card.medium {
+  background: #fef3c7;
+}
+
+.score-card.weak {
+  background: #fee2e2;
+}
+
+.score-header {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 12px;
+  font-weight: 900;
+  color: var(--text);
+}
+
+.score-header strong {
+  font-size: 22px;
+}
+
+.score-bar {
+  height: 10px;
+  background: white;
+  border-radius: 999px;
+  overflow: hidden;
+}
+
+.score-progress {
+  height: 100%;
+  border-radius: 999px;
+  background: linear-gradient(135deg, var(--primary), var(--secondary));
+}
+
+.score-card p {
+  margin: 12px 0 0;
+  color: var(--text);
+  font-weight: 700;
+}
+
+.quick-actions {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 10px;
+}
+
+.note-section {
+  background: var(--bg);
+  border-radius: 22px;
+  padding: 18px;
+  display: grid;
+  gap: 12px;
+}
+
+.note-section label {
+  font-weight: 900;
+  color: var(--text);
+}
+
+.note-input {
+  width: 100%;
+  min-height: 95px;
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  padding: 14px;
+  resize: vertical;
+  color: var(--text);
+  background: var(--card);
+  outline: none;
+  font-weight: 600;
+}
+
+.note-input:focus {
+  border-color: var(--primary);
+  box-shadow: 0 0 0 4px rgba(79, 70, 229, 0.12);
+}
+
+@media (max-width: 1250px) {
+  .stats-grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+
+  .filters-panel {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .quick-actions {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 850px) {
+  .recruiter-hero,
+  .bulk-panel {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .stats-grid,
+  .filters-panel,
+  .applications-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .quick-actions {
+    grid-template-columns: 1fr;
+  }
+
+  .recruiter-hero h1 {
+    font-size: 32px;
+  }
+
+  .card-top {
+    align-items: flex-start;
+  }
+}

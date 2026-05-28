@@ -1,84 +1,66 @@
-// src/app/core/header/header.ts
-
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { FormsModule } from '@angular/forms';
+
+import { ThemeService } from '../services/theme.service';
+import { SearchService } from '../services/search.service';
 
 @Component({
-  selector:'app-header',
-  standalone:true,
-  imports:[CommonModule],
-
-  template:`
-
-  <div class="header">
-
-    <input
-      placeholder="🔍 Search candidates..."
-    />
-
-    <div class="profile">
-
-      <div class="avatar">
-        A
-      </div>
-
-      <div>
-        <h4>Admin</h4>
-        <p>Recruiter</p>
-      </div>
-
-    </div>
-
-  </div>
-
-  `,
-
-  styles:[`
-
-    .header{
-      background:white;
-      padding:20px 30px;
-      display:flex;
-      justify-content:space-between;
-      align-items:center;
-      border-bottom:1px solid #eee;
-    }
-
-    input{
-      width:320px;
-      padding:12px;
-      border-radius:12px;
-      border:1px solid #ddd;
-    }
-
-    .profile{
-      display:flex;
-      align-items:center;
-      gap:10px;
-    }
-
-    .avatar{
-      width:45px;
-      height:45px;
-      border-radius:50%;
-      background:#2563eb;
-      color:white;
-      display:flex;
-      align-items:center;
-      justify-content:center;
-      font-weight:bold;
-    }
-
-    h4,p{
-      margin:0;
-    }
-
-    p{
-      color:#777;
-      font-size:13px;
-    }
-
-  `]
-  
+  selector: 'app-header',
+  standalone: true,
+  imports: [
+    CommonModule,
+    FormsModule
+  ],
+  templateUrl: './header.html',
+  styleUrls: ['./header.scss']
 })
-export class Header {}
+export class Header implements OnInit {
+
+  searchText = '';
+  userName = '';
+  role = '';
+  isDark = false;
+
+  constructor(
+    private themeService: ThemeService,
+    private searchService: SearchService
+  ) {}
+
+  ngOnInit(): void {
+    const userData = localStorage.getItem('user');
+
+    if (userData) {
+      const user = JSON.parse(userData);
+      this.userName = user.name;
+      this.role = user.role;
+    }
+
+    this.isDark = this.themeService.getCurrentTheme() === 'dark';
+  }
+
+  onSearchChange(): void {
+    this.searchService.updateSearch(this.searchText);
+  }
+
+  toggleTheme(): void {
+    this.themeService.toggleTheme();
+    this.isDark = this.themeService.getCurrentTheme() === 'dark';
+  }
+
+  getInitial(): string {
+    return this.userName?.charAt(0)?.toUpperCase() || 'U';
+  }
+
+  getRoleLabel(): string {
+    if (this.role === 'ADMIN') {
+      return 'Admin';
+    }
+
+    if (this.role === 'RECRUITER') {
+      return 'Recruteur';
+    }
+
+    return 'Utilisateur';
+  }
+}

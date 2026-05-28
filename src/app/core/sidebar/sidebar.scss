@@ -1,54 +1,121 @@
-.logo {
-  padding: 25px 25px 15px;
-  font-size: 22px;
-  font-weight: bold;
+.sidebar {
+  width: 280px;
+  height: 100vh;
+  background: linear-gradient(180deg, #0f172a, #111827);
   color: white;
+  position: fixed;
+  left: 0;
+  top: 0;
+  padding: 24px;
+  display: flex;
+  flex-direction: column;
+  z-index: 1000;
+}
+
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  margin-bottom: 34px;
+}
+
+.brand-icon {
+  width: 52px;
+  height: 52px;
+  border-radius: 18px;
+  background: linear-gradient(135deg, #4f46e5, #06b6d4);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 26px;
+}
+
+.brand h2 {
+  margin: 0;
+  font-size: 19px;
+}
+
+.brand p {
+  margin: 4px 0 0;
+  color: #cbd5e1;
+  font-size: 13px;
+}
+
+.nav {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.nav a {
+  color: #cbd5e1;
+  padding: 14px 16px;
+  border-radius: 16px;
+  font-weight: 800;
+  transition: 0.2s;
+}
+
+.nav a:hover,
+.nav a.active {
+  background: rgba(255, 255, 255, 0.12);
+  color: white;
+}
+
+.sidebar-footer {
+  margin-top: auto;
+}
+
+.user-box {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 14px;
+  background: rgba(255, 255, 255, 0.08);
+  border-radius: 18px;
+}
+
+.user-avatar {
+  width: 44px;
+  height: 44px;
+  border-radius: 15px;
+  background: #4f46e5;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 900;
+}
+
+.user-box h4 {
   margin: 0;
 }
 
-ul {
-  list-style: none;
-  padding: 0;
-  margin: 0;
+.user-box p {
+  margin: 4px 0 0;
+  color: #cbd5e1;
+  font-size: 12px;
 }
 
-li {
-  padding: 18px 25px;
+.logout {
+  width: 100%;
+  margin-top: 14px;
+  padding: 13px;
+  border: none;
+  border-radius: 16px;
+  background: #ef4444;
+  color: white;
+  font-weight: 900;
   cursor: pointer;
-  transition: all 0.3s;
-  color: #e2e8f0;
-  border-left: 4px solid transparent;
 }
 
-li:hover {
-  background: rgba(255,255,255,0.1);
-  color: white;
-  border-left-color: #2563eb;
-}
+@media (max-width: 900px) {
+  .sidebar {
+    position: relative;
+    width: 100%;
+    height: auto;
+  }
 
-.divider {
-  height: 1px;
-  background: rgba(255,255,255,0.2);
-  margin: 20px 0;
-}
-
-.coming-soon {
-  li {
-    color: #94a3b8;
-    cursor: not-allowed;
-    font-style: italic;
-    
-    &:hover {
-      background: none;
-      border-left-color: transparent;
-    }
-    .logout{
-  background:#ef4444;
-  color:white;
-  padding:10px 15px;
-  border:none;
-  border-radius:10px;
-  cursor:pointer;
-}
+  .nav {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
   }
 }

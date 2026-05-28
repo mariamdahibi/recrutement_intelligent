@@ -1,0 +1,247 @@
+<div class="page recruiter-pipeline-page">
+
+  <div *ngIf="loading" class="skeleton-list">
+    <div class="skeleton skeleton-line"></div>
+    <div class="skeleton skeleton-card"></div>
+    <div class="skeleton skeleton-card"></div>
+  </div>
+
+  <div *ngIf="error && !loading" class="error-card">
+    {{ error }}
+  </div>
+
+  <ng-container *ngIf="!loading && !error">
+
+    <section class="pipeline-hero">
+
+      <div>
+        <span class="badge">Pipeline recruteur</span>
+
+        <h1>🧩 Suivi visuel des candidatures</h1>
+
+        <p>
+          Visualisez rapidement l’avancement des candidats et déplacez-les dans le processus de recrutement.
+        </p>
+      </div>
+
+      <div class="hero-icon">
+        🚀
+      </div>
+
+    </section>
+
+    <section class="stats-grid">
+
+      <article class="stat-card">
+        <span>📨</span>
+        <div>
+          <h3>{{ getTotalCount() }}</h3>
+          <p>Total candidatures</p>
+        </div>
+      </article>
+
+      <article class="stat-card">
+        <span>🎯</span>
+        <div>
+          <h3>{{ getHighScoreCount() }}</h3>
+          <p>Scores ≥ 85%</p>
+        </div>
+      </article>
+
+      <article class="stat-card">
+        <span>⏳</span>
+        <div>
+          <h3>{{ getPendingCount() }}</h3>
+          <p>À traiter</p>
+        </div>
+      </article>
+
+      <article class="stat-card">
+        <span>📅</span>
+        <div>
+          <h3>{{ getInterviewCount() }}</h3>
+          <p>Entretiens</p>
+        </div>
+      </article>
+
+    </section>
+
+    <section class="filters-panel">
+
+      <div class="filter-group">
+        <label>Offre</label>
+
+        <select
+          class="input-control"
+          [(ngModel)]="jobFilter"
+        >
+          <option value="ALL">Toutes les offres</option>
+
+          <option
+            *ngFor="let job of getAvailableJobs()"
+            [value]="job"
+          >
+            {{ job }}
+          </option>
+        </select>
+      </div>
+
+      <div class="filter-group">
+        <label>Score minimum</label>
+
+        <select
+          class="input-control"
+          [(ngModel)]="minScoreFilter"
+        >
+          <option [value]="0">Tous les scores</option>
+          <option [value]="50">Score ≥ 50%</option>
+          <option [value]="70">Score ≥ 70%</option>
+          <option [value]="85">Score ≥ 85%</option>
+        </select>
+      </div>
+
+      <div class="result-count">
+        {{ filteredApplications.length }} résultat(s)
+      </div>
+
+    </section>
+
+    <section class="kanban-board">
+
+      <article
+        class="kanban-column"
+        *ngFor="let column of columns"
+      >
+
+        <div class="column-header">
+
+          <div>
+            <h2>{{ column.icon }} {{ column.label }}</h2>
+            <p>{{ column.description }}</p>
+          </div>
+
+          <span>
+            {{ getColumnApplications(column.status).length }}
+          </span>
+
+        </div>
+
+        <div
+          class="empty-column"
+          *ngIf="getColumnApplications(column.status).length === 0"
+        >
+          Aucun candidat
+        </div>
+
+        <div
+          class="candidate-card"
+          *ngFor="let application of getColumnApplications(column.status)"
+        >
+
+          <div class="candidate-top">
+
+            <div class="avatar">
+              {{ getCandidateInitial(application) }}
+            </div>
+
+            <div>
+              <h3>{{ getCandidateName(application) }}</h3>
+              <p>{{ getCandidateEmail(application) }}</p>
+            </div>
+
+          </div>
+
+          <div class="job-box">
+            <strong>{{ getJobTitle(application) }}</strong>
+            <p>🏢 {{ getJobCompany(application) }}</p>
+            <p>📍 {{ getJobLocation(application) }}</p>
+          </div>
+
+          <div
+            class="score-box"
+            [ngClass]="getScoreClass(getScore(application))"
+          >
+
+            <div>
+              <span>Score IA</span>
+              <strong>{{ getScore(application) }}%</strong>
+            </div>
+
+            <div class="score-bar">
+              <div
+                class="score-progress"
+                [style.width.%]="getScore(application)"
+              ></div>
+            </div>
+
+          </div>
+
+          <div class="move-actions">
+
+            <button
+              class="btn-secondary"
+              *ngIf="application.status !== 'PENDING'"
+              (click)="moveApplication(application, 'PENDING')"
+            >
+              ⏳
+            </button>
+
+            <button
+              class="btn-secondary"
+              *ngIf="application.status !== 'SHORTLISTED'"
+              (click)="moveApplication(application, 'SHORTLISTED')"
+            >
+              ⭐
+            </button>
+
+            <button
+              class="btn-secondary"
+              *ngIf="application.status !== 'INTERVIEW'"
+              (click)="moveApplication(application, 'INTERVIEW')"
+            >
+              📅
+            </button>
+
+            <button
+              class="btn-primary"
+              *ngIf="application.status !== 'ACCEPTED'"
+              (click)="moveApplication(application, 'ACCEPTED')"
+            >
+              ✅
+            </button>
+
+            <button
+              class="btn-danger"
+              *ngIf="application.status !== 'REJECTED'"
+              (click)="moveApplication(application, 'REJECTED')"
+            >
+              ❌
+            </button>
+
+          </div>
+
+          <div class="note-box">
+
+            <textarea
+              [(ngModel)]="application.recruiterNote"
+              placeholder="Note recruteur..."
+            ></textarea>
+
+            <button
+              class="btn-secondary"
+              (click)="saveNote(application)"
+            >
+              💾 Note
+            </button>
+
+          </div>
+
+        </div>
+
+      </article>
+
+    </section>
+
+  </ng-container>
+
+</div>

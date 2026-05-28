@@ -1,1 +1,163 @@
-<p>profile works!</p>
+<div class="page profile-page">
+
+  <div *ngIf="loading" class="skeleton-list">
+    <div class="skeleton skeleton-line"></div>
+    <div class="skeleton skeleton-card"></div>
+    <div class="skeleton skeleton-card"></div>
+  </div>
+
+  <div *ngIf="error && !loading" class="error-card">
+    {{ error }}
+  </div>
+
+  <ng-container *ngIf="!loading && !error && currentUser">
+
+    <section class="profile-hero">
+
+      <div class="profile-avatar-large">
+        {{ getInitial() }}
+      </div>
+
+      <div class="profile-info">
+        <span class="badge">
+          {{ getRoleLabel() }}
+        </span>
+
+        <h1>{{ currentUser.name }}</h1>
+
+        <p>{{ currentUser.email }}</p>
+      </div>
+
+    </section>
+
+    <section class="stats-grid">
+
+      <article class="stat-card">
+        <span>📨</span>
+        <div>
+          <h3>{{ getApplicationsCount() }}</h3>
+          <p>Candidatures</p>
+        </div>
+      </article>
+
+      <article class="stat-card">
+        <span>⏳</span>
+        <div>
+          <h3>{{ getPendingCount() }}</h3>
+          <p>En attente</p>
+        </div>
+      </article>
+
+      <article class="stat-card">
+        <span>✅</span>
+        <div>
+          <h3>{{ getAcceptedCount() }}</h3>
+          <p>Acceptées</p>
+        </div>
+      </article>
+
+      <article class="stat-card">
+        <span>❌</span>
+        <div>
+          <h3>{{ getRejectedCount() }}</h3>
+          <p>Refusées</p>
+        </div>
+      </article>
+
+    </section>
+
+    <section class="profile-grid">
+
+      <article class="card profile-card">
+
+        <h2>Informations personnelles</h2>
+
+        <div class="info-row">
+          <span>Nom complet</span>
+          <strong>{{ currentUser.name }}</strong>
+        </div>
+
+        <div class="info-row">
+          <span>Email</span>
+          <strong>{{ currentUser.email }}</strong>
+        </div>
+
+        <div class="info-row">
+          <span>Rôle</span>
+          <strong>{{ getRoleLabel() }}</strong>
+        </div>
+
+      </article>
+
+      <article class="card profile-card">
+
+        <h2>Compétences</h2>
+
+        <div
+          class="empty-skills"
+          *ngIf="getSkills().length === 0"
+        >
+          Aucune compétence renseignée.
+        </div>
+
+        <div class="skills" *ngIf="getSkills().length > 0">
+          <span *ngFor="let skill of getSkills()">
+            {{ skill }}
+          </span>
+        </div>
+
+      </article>
+
+    </section>
+
+    <section class="card quick-actions">
+
+      <h2>Actions rapides</h2>
+
+      <div class="actions-grid">
+
+        <a
+          routerLink="/app/jobs"
+          class="action-card"
+        >
+          <span>💼</span>
+          <strong>Consulter les offres</strong>
+          <p>Voir les offres disponibles.</p>
+        </a>
+
+        <a
+          *ngIf="isCandidate()"
+          routerLink="/app/my-applications"
+          class="action-card"
+        >
+          <span>📨</span>
+          <strong>Mes candidatures</strong>
+          <p>Suivre vos candidatures.</p>
+        </a>
+
+        <a
+          *ngIf="isCandidate()"
+          routerLink="/app/upload-cv"
+          class="action-card"
+        >
+          <span>📄</span>
+          <strong>Upload CV</strong>
+          <p>Analyser votre CV.</p>
+        </a>
+
+        <a
+          routerLink="/app/recommendations"
+          class="action-card"
+        >
+          <span>🤖</span>
+          <strong>AI Matching</strong>
+          <p>Voir les recommandations IA.</p>
+        </a>
+
+      </div>
+
+    </section>
+
+  </ng-container>
+
+</div>

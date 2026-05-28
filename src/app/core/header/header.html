@@ -1,3 +1,39 @@
-<div class="header">
-  <h3>Recrutement IA</h3>
-</div>
+<header class="header">
+
+  <div class="search-box">
+    <span>🔎</span>
+
+    <input
+      type="text"
+      [(ngModel)]="searchText"
+      (ngModelChange)="onSearchChange()"
+      placeholder="Recherche globale..."
+    />
+  </div>
+
+  <div class="header-actions">
+
+    <button
+      class="theme-btn"
+      (click)="toggleTheme()"
+      title="Changer le thème"
+    >
+      {{ isDark ? '☀️' : '🌙' }}
+    </button>
+
+    <div class="profile-box">
+
+      <div class="avatar">
+        {{ getInitial() }}
+      </div>
+
+      <div>
+        <h4>{{ userName || 'Utilisateur' }}</h4>
+        <p>{{ getRoleLabel() }}</p>
+      </div>
+
+    </div>
+
+  </div>
+
+</header>

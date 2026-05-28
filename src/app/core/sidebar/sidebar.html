@@ -1,29 +1,131 @@
-<h2 class="logo">
-  🤖 Recruitment IA
-</h2>
+<aside class="sidebar">
 
-<ul>
+  <div class="brand">
 
-  <li routerLink="/app/dashboard">
-    🏢 Dashboard
-  </li>
+    <div class="brand-icon">
+      🤖
+    </div>
 
-  <li routerLink="/app/profile">
-    👤 Profile
-  </li>
+    <div>
+      <h2>Recruitment IA</h2>
+      <p>{{ getRoleLabel() }}</p>
+    </div>
 
-  <li routerLink="/app/jobs">
-    💼 Jobs
-  </li>
+  </div>
 
-  <li routerLink="/app/applications">
-    📨 Applications
-  </li>
+  <nav class="nav">
 
-  <li routerLink="/app/recommendations">
-    🤖 AI Matching
-  </li>
-<button class="logout" (click)="logout()">
-  🚪 Logout
-</button>
-</ul>
+    <!-- Dashboard général uniquement pour recruteur et candidat -->
+    <a
+      *ngIf="!isAdmin()"
+      routerLink="/app/dashboard"
+      routerLinkActive="active"
+    >
+      📊 Dashboard
+    </a>
+
+    <!-- Dashboard spécial admin uniquement pour admin -->
+    <a
+      *ngIf="canSeeAdminDashboard()"
+      routerLink="/app/admin/dashboard"
+      routerLinkActive="active"
+    >
+      🛡️ Admin Dashboard
+    </a>
+
+    <a
+      routerLink="/app/profile"
+      routerLinkActive="active"
+    >
+      👤 Profile
+    </a>
+
+    <a
+      routerLink="/app/jobs"
+      routerLinkActive="active"
+    >
+      💼 Jobs
+    </a>
+
+    <a
+      *ngIf="canSeeMyApplications()"
+      routerLink="/app/my-applications"
+      routerLinkActive="active"
+    >
+      📨 Mes candidatures
+    </a>
+
+    <a
+      *ngIf="canSeeApplications()"
+      routerLink="/app/applications"
+      routerLinkActive="active"
+    >
+      📨 Applications
+    </a>
+
+    <a
+      *ngIf="canSeeRecruiterPipeline()"
+      routerLink="/app/recruiter-pipeline"
+      routerLinkActive="active"
+    >
+      🧩 Pipeline
+    </a>
+
+    <a
+      routerLink="/app/recommendations"
+      routerLinkActive="active"
+    >
+      🤖 AI Matching
+    </a>
+
+    <a
+      *ngIf="canSeeUploadCv()"
+      routerLink="/app/upload-cv"
+      routerLinkActive="active"
+    >
+      📄 Upload CV
+    </a>
+
+    <a
+      *ngIf="canSeeUsers()"
+      routerLink="/app/admin/users"
+      routerLinkActive="active"
+    >
+      👥 Users
+    </a>
+
+    <a
+      *ngIf="canSeeAdminLogs()"
+      routerLink="/app/admin/logs"
+      routerLinkActive="active"
+    >
+      📜 Logs
+    </a>
+
+  </nav>
+
+  <div class="sidebar-footer">
+
+    <div class="user-box">
+
+      <div class="user-avatar">
+        {{ getInitial() }}
+      </div>
+
+      <div>
+        <h4>{{ userName || 'Utilisateur' }}</h4>
+        <p>{{ role }}</p>
+      </div>
+
+    </div>
+
+    <button
+      class="logout"
+      (click)="logout()"
+    >
+      🚪 Logout
+    </button>
+
+  </div>
+
+</aside>

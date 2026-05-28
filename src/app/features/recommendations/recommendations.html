@@ -1,1 +1,259 @@
-<p>recommendations works!</p>
+<div class="page ai-page">
+
+  <div *ngIf="loading" class="ai-loading-card">
+    <div class="spinner"></div>
+
+    <div>
+      <h2>Analyse IA en cours...</h2>
+      <p>Calcul intelligent des compatibilités entre candidats et offres.</p>
+    </div>
+  </div>
+
+  <div *ngIf="error && !loading" class="error-card">
+    {{ error }}
+  </div>
+
+  <ng-container *ngIf="!loading && !error">
+
+    <section class="ai-hero">
+
+      <div>
+        <span class="badge">
+          {{ isCandidate() ? 'IA Candidat' : 'IA Recrutement' }}
+        </span>
+
+        <h1>🤖 Matching IA intelligent</h1>
+
+        <p>
+          {{ isCandidate()
+            ? 'Découvrez les offres les plus adaptées à votre profil avec un score IA explicable.'
+            : 'Analysez automatiquement les meilleurs candidats pour chaque offre grâce à un score IA explicable.'
+          }}
+        </p>
+      </div>
+
+      <div class="hero-icon">
+        🧠
+      </div>
+
+    </section>
+
+    <section class="stats-grid">
+
+      <article class="stat-card">
+        <span>🤖</span>
+        <div>
+          <h3>{{ getTotalCount() }}</h3>
+          <p>Matchings calculés</p>
+        </div>
+      </article>
+
+      <article class="stat-card">
+        <span>🎯</span>
+        <div>
+          <h3>{{ getBestScore() }}%</h3>
+          <p>Meilleur score</p>
+        </div>
+      </article>
+
+      <article class="stat-card">
+        <span>📊</span>
+        <div>
+          <h3>{{ getAverageScore() }}%</h3>
+          <p>Score moyen</p>
+        </div>
+      </article>
+
+      <article class="stat-card">
+        <span>⭐</span>
+        <div>
+          <h3>{{ getHighMatchesCount() }}</h3>
+          <p>Profils excellents</p>
+        </div>
+      </article>
+
+    </section>
+
+    <section class="filters-card">
+
+      <div class="filter-group">
+        <label>Recherche</label>
+
+        <input
+          class="input-control"
+          [(ngModel)]="search"
+          placeholder="Chercher candidat, offre, décision..."
+        />
+      </div>
+
+      <div class="filter-group">
+        <label>Offre</label>
+
+        <select
+          class="input-control"
+          [(ngModel)]="jobFilter"
+        >
+          <option value="ALL">Toutes les offres</option>
+
+          <option
+            *ngFor="let job of getAvailableJobs()"
+            [value]="job"
+          >
+            {{ job }}
+          </option>
+        </select>
+      </div>
+
+      <div class="filter-group">
+        <label>Score minimum</label>
+
+        <select
+          class="input-control"
+          [(ngModel)]="minScoreFilter"
+        >
+          <option [value]="0">Tous les scores</option>
+          <option [value]="50">Score ≥ 50%</option>
+          <option [value]="70">Score ≥ 70%</option>
+          <option [value]="85">Score ≥ 85%</option>
+        </select>
+      </div>
+
+    </section>
+
+    <div
+      class="empty-state"
+      *ngIf="filteredResults.length === 0"
+    >
+      <span class="icon">🤖</span>
+      <h3>Aucun matching trouvé</h3>
+      <p>Essayez de modifier les filtres ou les compétences des profils.</p>
+    </div>
+
+    <section
+      class="ai-grid"
+      *ngIf="filteredResults.length > 0"
+    >
+
+      <article
+        class="ai-card"
+        *ngFor="let result of filteredResults"
+      >
+
+        <div class="card-header">
+
+          <div class="candidate-avatar">
+            {{ result.candidateName.charAt(0) }}
+          </div>
+
+          <div>
+            <h2>{{ result.candidateName }}</h2>
+            <p>{{ result.candidateEmail || 'Email non disponible' }}</p>
+          </div>
+
+        </div>
+
+        <div class="job-box">
+
+          <span>Offre analysée</span>
+
+          <h3>{{ result.jobTitle }}</h3>
+
+          <p>
+            🏢 {{ result.jobCompany || 'Entreprise non renseignée' }}
+          </p>
+
+          <p>
+            📍 {{ result.jobLocation || 'Localisation non renseignée' }}
+          </p>
+
+        </div>
+
+        <div
+          class="score-card"
+          [ngClass]="getScoreClass(result.score)"
+        >
+
+          <div class="score-header">
+            <span>{{ result.level }}</span>
+            <strong>{{ result.score }}%</strong>
+          </div>
+
+          <div class="score-bar">
+            <div
+              class="score-progress"
+              [style.width.%]="result.score"
+            ></div>
+          </div>
+
+          <p>{{ result.decision }}</p>
+
+        </div>
+
+        <div class="summary-box">
+          <h3>Résumé IA</h3>
+          <p>{{ result.summary }}</p>
+        </div>
+
+        <div class="skills-section">
+
+          <div>
+            <h3>✅ Compétences correspondantes</h3>
+
+            <div
+              class="skills-list matched"
+              *ngIf="result.matchedSkills.length > 0"
+            >
+              <span *ngFor="let skill of result.matchedSkills">
+                {{ skill }}
+              </span>
+            </div>
+
+            <p
+              class="empty-text"
+              *ngIf="result.matchedSkills.length === 0"
+            >
+              Aucune compétence correspondante détectée.
+            </p>
+          </div>
+
+          <div>
+            <h3>⚠️ Compétences manquantes</h3>
+
+            <div
+              class="skills-list missing"
+              *ngIf="result.missingSkills.length > 0"
+            >
+              <span *ngFor="let skill of result.missingSkills">
+                {{ skill }}
+              </span>
+            </div>
+
+            <p
+              class="empty-text"
+              *ngIf="result.missingSkills.length === 0"
+            >
+              Aucune compétence manquante importante.
+            </p>
+          </div>
+
+        </div>
+
+        <div class="advice-box">
+
+          <h3>Conseils IA</h3>
+
+          <ul>
+            <li *ngFor="let advice of result.advice">
+              {{ advice }}
+            </li>
+          </ul>
+
+        </div>
+
+      </article>
+
+    </section>
+
+  </ng-container>
+
+</div>

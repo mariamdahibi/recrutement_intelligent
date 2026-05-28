@@ -1,21 +1,17 @@
-<div class="layout">
+<div class="app-layout">
 
-  <aside class="sidebar">
+  <app-sidebar></app-sidebar>
 
-    <app-sidebar></app-sidebar>
-
-  </aside>
-
-  <div class="main">
+  <section class="app-main">
 
     <app-header></app-header>
 
-    <div class="content">
-
+    <main class="app-content">
       <router-outlet></router-outlet>
+    </main>
 
-    </div>
+  </section>
 
-  </div>
+  <app-toast></app-toast>
 
 </div>

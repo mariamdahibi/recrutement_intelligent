@@ -1,105 +1,106 @@
-import { Component } from '@angular/core';
-import { Router, RouterModule } from '@angular/router';
+import { Component, OnInit } from '@angular/core';
+import { CommonModule } from '@angular/common';
+
+import {
+  Router,
+  RouterLink,
+  RouterLinkActive
+} from '@angular/router';
 
 @Component({
-  selector:'app-sidebar',
-  standalone:true,
-  imports:[RouterModule],
-
-template: `
-
-  <div class="sidebar">
-
-    <h2>
-      🤖 Recruitment IA
-    </h2>
-
-    <a routerLink="/app/dashboard">
-      🏢 Dashboard
-    </a>
-
-    <a routerLink="/app/profile">
-      👤 Profile
-    </a>
-
-    <a routerLink="/app/jobs">
-      💼 Jobs
-    </a>
-
-    <a routerLink="/app/applications">
-      📨 Applications
-    </a>
-
-    <a routerLink="/app/recommendations">
-      🤖 AI Matching
-    </a>
-<button
-  class="logout"
-  (click)="logout()">
-
-  🚪 Logout
-
-</button>
-  </div>
-
-  `,
-
-  styles:[`
-
-    .sidebar{
-      width:250px;
-      height:100vh;
-      background:#111827;
-      color:white;
-      padding:25px;
-      display:flex;
-      flex-direction:column;
-      gap:15px;
-    }
-
-    h2{
-      margin-bottom:30px;
-    }
-
-    a{
-      color:white;
-      text-decoration:none;
-      padding:14px;
-      border-radius:12px;
-      background:#1f2937;
-      transition:0.3s;
-    }
-
-    a:hover{
-      background:#2563eb;
-    }
-.logout{
-  margin-top:auto;
-  background:#ef4444;
-  color:white;
-  border:none;
-  padding:12px;
-  border-radius:12px;
-  cursor:pointer;
-}
-  `]
-
- 
+  selector: 'app-sidebar',
+  standalone: true,
+  imports: [
+    CommonModule,
+    RouterLink,
+    RouterLinkActive
+  ],
+  templateUrl: './sidebar.html',
+  styleUrls: ['./sidebar.scss']
 })
-export class Sidebar {
+export class Sidebar implements OnInit {
 
-  constructor(
-    private router:Router
-  ){}
+  userName = '';
+  role = '';
 
-  logout(){
+  constructor(private router: Router) {}
 
-    localStorage.removeItem('token');
+  ngOnInit(): void {
+    const userData = localStorage.getItem('user');
 
-    this.router.navigate(['/']);
+    if (userData) {
+      try {
+        const user = JSON.parse(userData);
 
+        this.userName = user.name || 'Utilisateur';
+        this.role = user.role || 'USER';
+      } catch {
+        localStorage.removeItem('user');
+        this.router.navigate(['/login']);
+      }
+    }
   }
 
+  isAdmin(): boolean {
+    return this.role === 'ADMIN';
+  }
+
+  isRecruiter(): boolean {
+    return this.role === 'RECRUITER';
+  }
+
+  isUser(): boolean {
+    return this.role === 'USER' || this.role === 'CANDIDATE';
+  }
+
+  canSeeApplications(): boolean {
+    return this.isAdmin() || this.isRecruiter();
+  }
+
+  canSeeRecruiterPipeline(): boolean {
+    return this.isAdmin() || this.isRecruiter();
+  }
+
+  canSeeMyApplications(): boolean {
+    return this.isUser();
+  }
+
+  canSeeUploadCv(): boolean {
+    return this.isUser();
+  }
+
+  canSeeUsers(): boolean {
+    return this.isAdmin();
+  }
+
+  canSeeAdminDashboard(): boolean {
+    return this.isAdmin();
+  }
+
+  canSeeAdminLogs(): boolean {
+    return this.isAdmin();
+  }
+
+  getRoleLabel(): string {
+    if (this.isAdmin()) {
+      return 'Espace Admin';
+    }
+
+    if (this.isRecruiter()) {
+      return 'Espace Recruteur';
+    }
+
+    return 'Espace Candidat';
+  }
+
+  getInitial(): string {
+    return this.userName
+      ? this.userName.charAt(0).toUpperCase()
+      : 'U';
+  }
+
+  logout(): void {
+    localStorage.removeItem('user');
+    this.router.navigate(['/login']);
+  }
 }
-  
-  
