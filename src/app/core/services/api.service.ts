@@ -81,15 +81,40 @@ export interface ActivityLog {
   createdAt: string;
 }
 
+export interface AiMatchRequest {
+  candidate?: any;
+  profile?: any;
+  jobs?: Job[];
+}
+
+export interface AiMatchResponse {
+  recommendations?: any[];
+  matches?: any[];
+  bestMatches?: any[];
+  summary?: string;
+}
+
 @Injectable({
   providedIn: 'root'
 })
 export class ApiService {
 
-  private apiUrl = 'http://localhost:3000';
-  private requestTimeout = 5000;
+  // Backend Spring Boot
+  private backendUrl = 'http://20.19.209.121:8080/api';
+
+  // Json-server temporaire pour les données qui ne sont pas encore dans le backend
+  private mockUrl = 'http://localhost:3000';
+
+  // Service IA FastAPI
+  private aiUrl = 'http://20.19.209.121:8000';
+
+  private requestTimeout = 8000;
 
   constructor(private http: HttpClient) {}
+
+  // =====================================================
+  // SESSION UTILISATEUR
+  // =====================================================
 
   getCurrentUser(): User | null {
     const userData = localStorage.getItem('user');
@@ -114,8 +139,28 @@ export class ApiService {
     return role === 'CANDIDATE' ? 'USER' : role;
   }
 
+  logout(): void {
+    localStorage.removeItem('user');
+  }
+
+  isAdmin(): boolean {
+    return this.getNormalizedRole(this.getCurrentUser()?.role) === 'ADMIN';
+  }
+
+  isRecruiter(): boolean {
+    return this.getNormalizedRole(this.getCurrentUser()?.role) === 'RECRUITER';
+  }
+
+  isCandidate(): boolean {
+    return this.getNormalizedRole(this.getCurrentUser()?.role) === 'USER';
+  }
+
+  // =====================================================
+  // USERS — BACKEND SPRING BOOT
+  // =====================================================
+
   getUsers(): Observable<User[]> {
-    return this.http.get<User[]>(`${this.apiUrl}/users`).pipe(
+    return this.http.get<User[]>(`${this.backendUrl}/users`).pipe(
       timeout(this.requestTimeout),
       catchError(error => {
         console.error('Users API error:', error);
@@ -124,8 +169,46 @@ export class ApiService {
     );
   }
 
+  getUserById(id: number | string): Observable<User> {
+    return this.getUsers().pipe(
+      map((users: User[]) => {
+        const user = users.find(u => String(u.id) === String(id));
+        return user as User;
+      }),
+      catchError(error => {
+        console.error('User by id error:', error);
+        return of(null as any);
+      })
+    );
+  }
+
+  createUser(user: Partial<User>): Observable<User> {
+    return this.http.post<User>(`${this.backendUrl}/users`, user).pipe(
+      timeout(this.requestTimeout)
+    );
+  }
+
+  updateUser(user: User): Observable<User> {
+    return this.http.put<User>(
+      `${this.backendUrl}/users/${user.id}`,
+      user
+    ).pipe(
+      timeout(this.requestTimeout)
+    );
+  }
+
+  deleteUser(id: number | string): Observable<any> {
+    return this.http.delete(`${this.backendUrl}/users/${id}`).pipe(
+      timeout(this.requestTimeout)
+    );
+  }
+
+  // =====================================================
+  // JOBS — BACKEND SPRING BOOT
+  // =====================================================
+
   getJobs(): Observable<Job[]> {
-    return this.http.get<Job[]>(`${this.apiUrl}/jobs`).pipe(
+    return this.http.get<Job[]>(`${this.backendUrl}/jobs`).pipe(
       timeout(this.requestTimeout),
       catchError(error => {
         console.error('Jobs API error:', error);
@@ -135,23 +218,45 @@ export class ApiService {
   }
 
   getJobById(id: number | string): Observable<Job> {
-    return this.http.get<Job>(`${this.apiUrl}/jobs/${id}`).pipe(
-      timeout(this.requestTimeout)
-    );
-  }
-
-  getCandidates(): Observable<Candidate[]> {
-    return this.http.get<Candidate[]>(`${this.apiUrl}/candidates`).pipe(
-      timeout(this.requestTimeout),
+    return this.getJobs().pipe(
+      map((jobs: Job[]) => {
+        const job = jobs.find(j => String(j.id) === String(id));
+        return job as Job;
+      }),
       catchError(error => {
-        console.error('Candidates API error:', error);
-        return of([]);
+        console.error('Job by id error:', error);
+        return of(null as any);
       })
     );
   }
 
+  createJob(job: Partial<Job>): Observable<Job> {
+    return this.http.post<Job>(`${this.backendUrl}/jobs`, job).pipe(
+      timeout(this.requestTimeout)
+    );
+  }
+
+  updateJob(job: Job): Observable<Job> {
+    return this.http.put<Job>(
+      `${this.backendUrl}/jobs/${job.id}`,
+      job
+    ).pipe(
+      timeout(this.requestTimeout)
+    );
+  }
+
+  deleteJob(id: number | string): Observable<any> {
+    return this.http.delete(`${this.backendUrl}/jobs/${id}`).pipe(
+      timeout(this.requestTimeout)
+    );
+  }
+
+  // =====================================================
+  // APPLICATIONS — BACKEND SPRING BOOT
+  // =====================================================
+
   getApplications(): Observable<Application[]> {
-    return this.http.get<Application[]>(`${this.apiUrl}/applications`).pipe(
+    return this.http.get<Application[]>(`${this.backendUrl}/applications`).pipe(
       timeout(this.requestTimeout),
       catchError(error => {
         console.error('Applications API error:', error);
@@ -161,66 +266,51 @@ export class ApiService {
   }
 
   getApplicationById(id: number | string): Observable<Application> {
-    return this.http.get<Application>(`${this.apiUrl}/applications/${id}`).pipe(
-      timeout(this.requestTimeout)
-    );
-  }
-
-  getRecommendations(): Observable<Recommendation[]> {
-    return this.http.get<Recommendation[]>(`${this.apiUrl}/recommendations`).pipe(
-      timeout(this.requestTimeout),
+    return this.getApplications().pipe(
+      map((applications: Application[]) => {
+        const application = applications.find(a => String(a.id) === String(id));
+        return application as Application;
+      }),
       catchError(error => {
-        console.error('Recommendations API error:', error);
-        return of([]);
+        console.error('Application by id error:', error);
+        return of(null as any);
       })
     );
   }
 
-  createUser(user: Partial<User>): Observable<User> {
-    return this.http.post<User>(`${this.apiUrl}/users`, user).pipe(
-      timeout(this.requestTimeout)
-    );
-  }
-
-  updateUser(user: User): Observable<User> {
-    return this.http.put<User>(
-      `${this.apiUrl}/users/${user.id}`,
-      user
-    ).pipe(
-      timeout(this.requestTimeout)
-    );
-  }
-
-  deleteUser(id: number | string): Observable<any> {
-    return this.http.delete(`${this.apiUrl}/users/${id}`).pipe(
-      timeout(this.requestTimeout)
-    );
-  }
-
-  createJob(job: Partial<Job>): Observable<Job> {
-    return this.http.post<Job>(`${this.apiUrl}/jobs`, job).pipe(
-      timeout(this.requestTimeout)
-    );
-  }
-
-  deleteJob(id: number | string): Observable<any> {
-    return this.http.delete(`${this.apiUrl}/jobs/${id}`).pipe(
-      timeout(this.requestTimeout)
-    );
-  }
-
   createApplication(application: Partial<Application>): Observable<Application> {
-    const applicationToCreate: Partial<Application> = {
-      ...application,
-      status: application.status || 'PENDING',
-      createdAt: application.createdAt || new Date().toISOString(),
-      updatedAt: new Date().toISOString()
+    const currentUser = this.getCurrentUser();
+
+    const appToCreate: any = {
+      status: application.status || 'PENDING'
     };
 
+    if (application.user && typeof application.user === 'object' && application.user.id) {
+      appToCreate.user = {
+        id: application.user.id
+      };
+    } else if (currentUser?.id) {
+      appToCreate.user = {
+        id: currentUser.id
+      };
+    }
+
+    if (application.job && typeof application.job === 'object' && application.job.id) {
+      appToCreate.job = {
+        id: application.job.id
+      };
+    }
+
     return this.http.post<Application>(
-      `${this.apiUrl}/applications`,
-      applicationToCreate
+      `${this.backendUrl}/applications`,
+      appToCreate
     ).pipe(
+      timeout(this.requestTimeout)
+    );
+  }
+
+  deleteApplication(id: number | string): Observable<any> {
+    return this.http.delete(`${this.backendUrl}/applications/${id}`).pipe(
       timeout(this.requestTimeout)
     );
   }
@@ -231,12 +321,9 @@ export class ApiService {
       updatedAt: new Date().toISOString()
     };
 
-    return this.http.put<Application>(
-      `${this.apiUrl}/applications/${application.id}`,
-      applicationToUpdate
-    ).pipe(
-      timeout(this.requestTimeout)
-    );
+    console.warn('updateApplication non connecté au backend pour le moment.');
+
+    return of(applicationToUpdate);
   }
 
   updateApplicationStatus(
@@ -286,17 +373,43 @@ export class ApiService {
     return this.updateApplication(applicationToUpdate);
   }
 
-  deleteApplication(id: number | string): Observable<any> {
-    return this.http.delete(`${this.apiUrl}/applications/${id}`).pipe(
-      timeout(this.requestTimeout)
+  // =====================================================
+  // CANDIDATES — JSON-SERVER TEMPORAIRE
+  // =====================================================
+
+  getCandidates(): Observable<Candidate[]> {
+    return this.http.get<Candidate[]>(`${this.mockUrl}/candidates`).pipe(
+      timeout(this.requestTimeout),
+      catchError(error => {
+        console.warn('Candidates non disponibles. json-server peut être fermé.', error);
+        return of([]);
+      })
     );
   }
 
-  getActivityLogs(): Observable<ActivityLog[]> {
-    return this.http.get<ActivityLog[]>(`${this.apiUrl}/activityLogs`).pipe(
+  // =====================================================
+  // RECOMMENDATIONS — JSON-SERVER TEMPORAIRE
+  // =====================================================
+
+  getRecommendations(): Observable<Recommendation[]> {
+    return this.http.get<Recommendation[]>(`${this.mockUrl}/recommendations`).pipe(
       timeout(this.requestTimeout),
       catchError(error => {
-        console.error('Activity logs API error:', error);
+        console.warn('Recommendations non disponibles. json-server peut être fermé.', error);
+        return of([]);
+      })
+    );
+  }
+
+  // =====================================================
+  // ACTIVITY LOGS — JSON-SERVER TEMPORAIRE
+  // =====================================================
+
+  getActivityLogs(): Observable<ActivityLog[]> {
+    return this.http.get<ActivityLog[]>(`${this.mockUrl}/activityLogs`).pipe(
+      timeout(this.requestTimeout),
+      catchError(error => {
+        console.warn('Activity logs non disponibles. json-server peut être fermé.', error);
         return of([]);
       })
     );
@@ -309,12 +422,20 @@ export class ApiService {
     };
 
     return this.http.post<ActivityLog>(
-      `${this.apiUrl}/activityLogs`,
+      `${this.mockUrl}/activityLogs`,
       logToCreate
     ).pipe(
-      timeout(this.requestTimeout)
+      timeout(this.requestTimeout),
+      catchError(error => {
+        console.warn('Activity log non sauvegardé. json-server indisponible.', error);
+        return of(logToCreate as ActivityLog);
+      })
     );
   }
+
+  // =====================================================
+  // LOGIN — VIA BACKEND USERS
+  // =====================================================
 
   login(
     email: string,
@@ -341,6 +462,10 @@ export class ApiService {
           );
         });
 
+        if (user) {
+          localStorage.setItem('user', JSON.stringify(user));
+        }
+
         return user || null;
       }),
       catchError(error => {
@@ -350,19 +475,38 @@ export class ApiService {
     );
   }
 
-  logout(): void {
-    localStorage.removeItem('user');
+  // =====================================================
+  // IA FASTAPI
+  // =====================================================
+
+  checkAiHealth(): Observable<any> {
+    return this.http.get(`${this.aiUrl}/health`).pipe(
+      timeout(this.requestTimeout),
+      catchError(error => {
+        console.error('AI health error:', error);
+        return of({
+          status: 'DOWN',
+          error: true
+        });
+      })
+    );
   }
 
-  isAdmin(): boolean {
-    return this.getNormalizedRole(this.getCurrentUser()?.role) === 'ADMIN';
-  }
-
-  isRecruiter(): boolean {
-    return this.getNormalizedRole(this.getCurrentUser()?.role) === 'RECRUITER';
-  }
-
-  isCandidate(): boolean {
-    return this.getNormalizedRole(this.getCurrentUser()?.role) === 'USER';
+  matchProfileJobs(payload: AiMatchRequest): Observable<AiMatchResponse> {
+    return this.http.post<AiMatchResponse>(
+      `${this.aiUrl}/api/ai/match-profile-jobs`,
+      payload
+    ).pipe(
+      timeout(15000),
+      catchError(error => {
+        console.error('AI matching error:', error);
+        return of({
+          recommendations: [],
+          matches: [],
+          bestMatches: [],
+          summary: 'Service IA indisponible.'
+        });
+      })
+    );
   }
 }
