@@ -1,0 +1,147 @@
+<div class="login-page">
+
+  <section class="login-left">
+
+    <div class="brand-box">
+      <div class="logo">🤖</div>
+
+      <h1>Recruitment IA</h1>
+
+      <p>
+        Plateforme intelligente pour connecter les candidats,
+        les recruteurs et les administrateurs.
+      </p>
+
+      <div class="features">
+
+        <div class="feature">
+          <span>🎯</span>
+          <div>
+            <h3>AI Matching</h3>
+            <p>Analyse automatique des compétences et recommandations.</p>
+          </div>
+        </div>
+
+        <div class="feature">
+          <span>💼</span>
+          <div>
+            <h3>Gestion des offres</h3>
+            <p>Les recruteurs peuvent publier et gérer les postes.</p>
+          </div>
+        </div>
+
+        <div class="feature">
+          <span>🛡️</span>
+          <div>
+            <h3>Administration</h3>
+            <p>L’admin contrôle les utilisateurs et les recruteurs.</p>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+  </section>
+
+  <section class="login-right">
+
+    <div class="login-card">
+
+      <div class="login-header">
+
+        <div class="login-icon">
+          🤖
+        </div>
+
+        <h2>Connexion</h2>
+
+        <p>
+          Accédez à votre espace selon votre rôle
+        </p>
+
+      </div>
+
+      <div class="form-group">
+
+        <label>Email</label>
+
+        <div class="input-wrapper">
+          <span>📧</span>
+
+          <input
+            type="email"
+            [(ngModel)]="email"
+            placeholder="Entrez votre email"
+          />
+        </div>
+
+      </div>
+
+      <div class="form-group">
+
+        <label>Mot de passe</label>
+
+        <div class="input-wrapper">
+          <span>🔒</span>
+
+          <input
+            type="password"
+            [(ngModel)]="password"
+            placeholder="Entrez votre mot de passe"
+          />
+        </div>
+
+      </div>
+
+      <div class="form-group">
+
+        <label>Rôle</label>
+
+        <div class="input-wrapper">
+          <span>👤</span>
+
+          <select [(ngModel)]="role">
+            <option value="ADMIN">Admin</option>
+            <option value="RECRUITER">Recruteur</option>
+            <option value="USER">Utilisateur</option>
+          </select>
+        </div>
+
+      </div>
+
+      <button
+        class="login-btn"
+        (click)="login()"
+        [disabled]="loading"
+      >
+        <span *ngIf="!loading">Se connecter</span>
+        <span *ngIf="loading">Connexion en cours...</span>
+      </button>
+
+      <p *ngIf="error" class="error-message">
+        {{ error }}
+      </p>
+
+      <div class="demo-accounts">
+
+        <h4>Comptes de test</h4>
+
+        <p>
+          Admin : admin@gmail.com / 1234
+        </p>
+
+        <p>
+          Recruteur : recruiter@gmail.com / 1234
+        </p>
+
+        <p>
+          Utilisateur : candidate@gmail.com / 1234
+        </p>
+
+      </div>
+
+    </div>
+
+  </section>
+
+</div>

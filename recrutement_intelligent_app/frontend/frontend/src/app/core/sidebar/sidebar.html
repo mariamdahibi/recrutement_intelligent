@@ -1,0 +1,74 @@
+<aside class="sidebar">
+
+  <div class="brand">
+    <div class="brand-icon">🤖</div>
+    <div>
+      <h2>Recruitment IA</h2>
+      <p *ngIf="isUser()">Espace Candidat</p>
+      <p *ngIf="isRecruiter()">Espace Recruteur</p>
+      <p *ngIf="isAdmin()">Espace Admin</p>
+    </div>
+  </div>
+
+  <nav class="nav">
+
+    <a routerLink="/app/dashboard" routerLinkActive="active">
+      <span>🏠</span>
+      <strong>Dashboard</strong>
+    </a>
+
+    <a routerLink="/app/profile" routerLinkActive="active">
+      <span>👤</span>
+      <strong>Profile</strong>
+    </a>
+
+    <a routerLink="/app/jobs" routerLinkActive="active">
+      <span>💼</span>
+      <strong>Jobs</strong>
+    </a>
+
+    <a
+      *ngIf="canSeeApplications()"
+      routerLink="/app/applications"
+      routerLinkActive="active"
+    >
+      <span>📨</span>
+      <strong>Applications</strong>
+    </a>
+
+    <a routerLink="/app/recommendations" routerLinkActive="active">
+      <span>🤖</span>
+      <strong>AI Matching</strong>
+    </a>
+
+    <a
+      *ngIf="canSeeUsers()"
+      routerLink="/app/admin/users"
+      routerLinkActive="active"
+    >
+      <span>🛡️</span>
+      <strong>Users</strong>
+    </a>
+
+  </nav>
+
+  <div class="sidebar-footer">
+
+    <div class="mini-profile">
+      <div class="avatar">
+        {{ userName.charAt(0) || 'U' }}
+      </div>
+
+      <div>
+        <h4>{{ userName || 'User' }}</h4>
+        <p>{{ role }}</p>
+      </div>
+    </div>
+
+    <button class="logout" (click)="logout()">
+      🚪 Logout
+    </button>
+
+  </div>
+
+</aside>

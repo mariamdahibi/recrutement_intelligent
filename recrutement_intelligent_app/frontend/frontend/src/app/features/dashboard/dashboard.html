@@ -1,0 +1,173 @@
+<div class="dashboard-page">
+
+  <div *ngIf="loading" class="loading-card">
+    Loading dashboard...
+  </div>
+
+  <div *ngIf="error && !loading" class="error-card">
+    {{ error }}
+  </div>
+
+  <ng-container *ngIf="!loading && !error">
+
+    <!-- USER / CANDIDATE -->
+    <section *ngIf="role === 'USER'" class="hero candidate-hero">
+
+      <div>
+        <span class="badge">Espace Candidat</span>
+        <h1>Bienvenue {{ currentUser?.name }}</h1>
+        <p>
+          Consulte tes offres recommandées, ton profil et ton score IA.
+        </p>
+      </div>
+
+      <div class="hero-card" *ngIf="candidateProfile">
+        <div class="big-avatar">
+          {{ candidateProfile.name.charAt(0) }}
+        </div>
+        <h2>{{ candidateProfile.name }}</h2>
+        <p>{{ candidateProfile.skills }}</p>
+        <strong>{{ candidateProfile.score || 0 }}% Score IA</strong>
+      </div>
+
+    </section>
+
+    <!-- RECRUITER -->
+    <section *ngIf="role === 'RECRUITER'" class="hero recruiter-hero">
+
+      <div>
+        <span class="badge">Espace Recruteur</span>
+        <h1>Dashboard Recruteur</h1>
+        <p>
+          Publie des offres, consulte les candidatures et suis les meilleurs profils.
+        </p>
+      </div>
+
+    </section>
+
+    <!-- ADMIN -->
+    <section *ngIf="role === 'ADMIN'" class="hero admin-hero">
+
+      <div>
+        <span class="badge">Espace Admin</span>
+        <h1>Administration globale</h1>
+        <p>
+          Gère les utilisateurs, les recruteurs, les offres et les candidatures.
+        </p>
+      </div>
+
+    </section>
+
+    <!-- STATS -->
+    <div class="stats-grid">
+
+      <div class="stat-card blue">
+        <span>👥</span>
+        <h2>{{ candidates.length }}</h2>
+        <p>Candidats</p>
+      </div>
+
+      <div class="stat-card green">
+        <span>💼</span>
+        <h2>{{ jobs.length }}</h2>
+        <p>Offres</p>
+      </div>
+
+      <div class="stat-card purple" *ngIf="role !== 'USER'">
+        <span>📨</span>
+        <h2>{{ applications.length }}</h2>
+        <p>Candidatures</p>
+      </div>
+
+      <div class="stat-card orange" *ngIf="role === 'ADMIN'">
+        <span>🛡️</span>
+        <h2>{{ users.length }}</h2>
+        <p>Utilisateurs</p>
+      </div>
+
+    </div>
+
+    <!-- ADMIN DETAILS -->
+    <div *ngIf="role === 'ADMIN'" class="dashboard-grid">
+
+      <div class="panel">
+        <h2>Gestion Admin</h2>
+
+        <div class="action-list">
+          <a routerLink="/app/admin/users">🛡️ Gérer les utilisateurs</a>
+          <a routerLink="/app/jobs">💼 Gérer les offres</a>
+          <a routerLink="/app/applications">📨 Voir les candidatures</a>
+        </div>
+      </div>
+
+      <div class="panel">
+        <h2>Résumé</h2>
+        <div class="summary-row">
+          <span>Recruteurs</span>
+          <strong>{{ recruitersCount() }}</strong>
+        </div>
+        <div class="summary-row">
+          <span>Utilisateurs</span>
+          <strong>{{ usersCount() }}</strong>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- RECRUITER DETAILS -->
+    <div *ngIf="role === 'RECRUITER'" class="dashboard-grid">
+
+      <div class="panel">
+        <h2>Top Candidates</h2>
+
+        <div class="candidate-row" *ngFor="let candidate of topCandidates">
+          <div>
+            <h3>{{ candidate.name }}</h3>
+            <p>{{ candidate.skills }}</p>
+          </div>
+          <span>{{ candidate.score || 0 }}%</span>
+        </div>
+      </div>
+
+      <div class="panel">
+        <h2>Actions Recruteur</h2>
+
+        <div class="action-list">
+          <a routerLink="/app/jobs">➕ Publier une offre</a>
+          <a routerLink="/app/applications">📨 Gérer les candidatures</a>
+          <a routerLink="/app/recommendations">🤖 Voir AI Matching</a>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- USER DETAILS -->
+    <div *ngIf="role === 'USER'" class="dashboard-grid">
+
+      <div class="panel">
+        <h2>Offres recommandées</h2>
+
+        <div class="recommendation-row" *ngFor="let rec of bestRecommendations">
+          <div>
+            <h3>{{ rec.job }}</h3>
+            <p>{{ rec.candidate || 'Candidate' }}</p>
+          </div>
+          <span>{{ rec.match || 0 }}%</span>
+        </div>
+      </div>
+
+      <div class="panel">
+        <h2>Actions Candidat</h2>
+
+        <div class="action-list">
+          <a routerLink="/app/profile">👤 Voir mon profil</a>
+          <a routerLink="/app/jobs">💼 Voir les offres</a>
+          <a routerLink="/app/recommendations">🤖 AI Matching</a>
+        </div>
+      </div>
+
+    </div>
+
+  </ng-container>
+
+</div>

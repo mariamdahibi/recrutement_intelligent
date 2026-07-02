@@ -1,0 +1,50 @@
+<div class="page">
+
+  <div *ngIf="loading" class="skeleton-list">
+    <div class="skeleton skeleton-line"></div>
+    <div class="skeleton skeleton-card"></div>
+  </div>
+
+  <div *ngIf="error && !loading" class="error-card">
+    {{ error }}
+  </div>
+
+  <ng-container *ngIf="job && !loading">
+
+    <section class="page-hero">
+      <span class="badge">Détail offre</span>
+
+      <h1>{{ job.title }}</h1>
+
+      <p>{{ job.description }}</p>
+    </section>
+
+    <section class="card detail-card">
+
+      <div class="info-row">
+        <span>🏢 Entreprise</span>
+        <strong>{{ job.company || 'Non renseignée' }}</strong>
+      </div>
+
+      <div class="info-row">
+        <span>📍 Localisation</span>
+        <strong>{{ job.location || 'Non renseignée' }}</strong>
+      </div>
+
+      <h3>Compétences demandées</h3>
+
+      <div class="skills">
+        <span *ngFor="let skill of getSkills()">
+          {{ skill }}
+        </span>
+      </div>
+
+      <a routerLink="/app/jobs" class="btn-secondary">
+        ← Retour aux offres
+      </a>
+
+    </section>
+
+  </ng-container>
+
+</div>

@@ -1,0 +1,230 @@
+{
+  "users": [
+    {
+      "id": "1",
+      "name": "Admin",
+      "email": "admin@gmail.com",
+      "password": "1234",
+      "role": "ADMIN",
+      "skills": "Administration, Supervision, Sécurité"
+    },
+    {
+      "id": "2",
+      "name": "Recruiter",
+      "email": "recruiter@gmail.com",
+      "password": "1234",
+      "role": "RECRUITER",
+      "skills": "Recrutement, Analyse candidats, RH"
+    },
+    {
+      "id": "3",
+      "name": "Candidate",
+      "email": "candidate@gmail.com",
+      "password": "1234",
+      "role": "USER",
+      "skills": "Angular, TypeScript, Java, Spring Boot"
+    },
+    {
+      "id": "4",
+      "name": "Ali",
+      "email": "ali@gmail.com",
+      "password": "1234",
+      "role": "USER",
+      "skills": "Java, Spring Boot, MySQL"
+    },
+    {
+      "id": "5",
+      "name": "Sara",
+      "email": "sara@gmail.com",
+      "password": "1234",
+      "role": "USER",
+      "skills": "Angular, TypeScript, HTML, SCSS"
+    }
+  ],
+  "jobs": [
+    {
+      "id": "2",
+      "title": "Backend Developer",
+      "company": "Software Company",
+      "description": "Développement d'API REST avec Java Spring Boot.",
+      "location": "Rabat",
+      "skills": "Java, Spring Boot"
+    },
+    {
+      "id": "3",
+      "title": "INGENIEUR MECANIQUE",
+      "company": "TPV",
+      "description": "Poste orienté mécanique et électromécanique.",
+      "location": "Tanger",
+      "skills": "Mécanique, Electromécanique"
+    }
+  ],
+  "candidates": [
+    {
+      "id": "1",
+      "name": "Candidate",
+      "email": "candidate@gmail.com",
+      "skills": "Angular, Java",
+      "score": 88
+    },
+    {
+      "id": "2",
+      "name": "Ali",
+      "email": "ali@gmail.com",
+      "skills": "Java, Spring Boot",
+      "score": 80
+    },
+    {
+      "id": "3",
+      "name": "Sara",
+      "email": "sara@gmail.com",
+      "skills": "Angular, TypeScript, HTML, SCSS",
+      "score": 95
+    }
+  ],
+  "applications": [
+    {
+      "id": "1",
+      "status": "PENDING",
+      "job": {
+        "id": "1",
+        "title": "Frontend Developer",
+        "company": "Tech Company",
+        "description": "Développement d'interfaces web avec Angular.",
+        "location": "Casablanca",
+        "skills": "Angular, TypeScript"
+      },
+      "user": {
+        "id": "3",
+        "name": "Candidate",
+        "email": "candidate@gmail.com",
+        "role": "USER"
+      },
+      "score": 88,
+      "createdAt": "2026-05-26T12:00:00.000Z",
+      "updatedAt": "2026-06-01T13:09:59.958Z",
+      "recruiterNote": "Profil intéressant, entretien à planifier.",
+      "interviewDate": "2026-05-30T10:00:00.000Z",
+      "interviewMode": "Online",
+      "interviewLink": "Google Meet"
+    },
+    {
+      "id": "2",
+      "status": "INTERVIEW",
+      "job": {
+        "id": "2",
+        "title": "Backend Developer",
+        "company": "Software Company",
+        "description": "Développement d'API REST avec Java Spring Boot.",
+        "location": "Rabat",
+        "skills": "Java, Spring Boot"
+      },
+      "user": {
+        "id": "4",
+        "name": "Ali",
+        "email": "ali@gmail.com",
+        "role": "USER"
+      },
+      "score": 80,
+      "createdAt": "2026-05-26T12:15:00.000Z",
+      "updatedAt": "2026-06-01T12:57:51.611Z",
+      "recruiterNote": "Bon profil backend, à comparer avec les autres candidats."
+    },
+    {
+      "id": "3",
+      "status": "INTERVIEW",
+      "job": {
+        "id": "1",
+        "title": "Frontend Developer",
+        "company": "Tech Company",
+        "description": "Développement d'interfaces web avec Angular.",
+        "location": "Casablanca",
+        "skills": "Angular, TypeScript"
+      },
+      "user": {
+        "id": "5",
+        "name": "Sara",
+        "email": "sara@gmail.com",
+        "role": "USER"
+      },
+      "score": 95,
+      "createdAt": "2026-05-26T12:35:15.841Z",
+      "updatedAt": "2026-06-01T13:08:45.103Z",
+      "recruiterNote": "Très bon score IA, mais candidature refusée pour test."
+    },
+    {
+      "status": "SHORTLISTED",
+      "job": {
+        "id": "2",
+        "title": "Backend Developer",
+        "company": "Software Company",
+        "description": "Développement d'API REST avec Java Spring Boot.",
+        "location": "Rabat",
+        "skills": "Java, Spring Boot"
+      },
+      "user": {
+        "id": "3",
+        "name": "Candidate",
+        "email": "candidate@gmail.com",
+        "role": "USER"
+      },
+      "score": 74,
+      "createdAt": "2026-06-01T12:52:39.353Z",
+      "updatedAt": "2026-06-01T12:57:22.846Z",
+      "id": "k0fwm_-aC6k"
+    }
+  ],
+  "recommendations": [
+    {
+      "id": "1",
+      "candidate": "Candidate",
+      "job": "Frontend Developer",
+      "match": 88,
+      "score": 88
+    },
+    {
+      "id": "2",
+      "candidate": "Ali",
+      "job": "Backend Developer",
+      "match": 80,
+      "score": 80
+    },
+    {
+      "id": "3",
+      "candidate": "Sara",
+      "job": "Frontend Developer",
+      "match": 95,
+      "score": 95
+    }
+  ],
+  "activityLogs": [
+    {
+      "id": "1",
+      "action": "Initialisation de la plateforme",
+      "type": "SYSTEM",
+      "actor": "Système",
+      "role": "SYSTEM",
+      "target": "Application",
+      "createdAt": "2026-05-26T08:00:00.000Z"
+    },
+    {
+      "id": "2",
+      "action": "Création utilisateur",
+      "type": "USER",
+      "actor": "admin@gmail.com",
+      "role": "ADMIN",
+      "target": "candidate@gmail.com",
+      "createdAt": "2026-05-26T09:00:00.000Z"
+    },
+    {
+      "id": "3",
+      "action": "Mise à jour candidature",
+      "type": "APPLICATION",
+      "actor": "recruiter@gmail.com",
+      "role": "RECRUITER",
+      "target": "Candidate - Frontend Developer",
+      "createdAt": "2026-05-26T15:18:11.341Z"
+    }
+  ],
+  "$schema": "./node_modules/json-server/schema.json"
+}

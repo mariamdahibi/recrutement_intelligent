@@ -1,0 +1,31 @@
+.detail-card {
+  display: grid;
+  gap: 20px;
+}
+
+.info-row {
+  background: var(--bg);
+  padding: 18px;
+  border-radius: 18px;
+  display: flex;
+  justify-content: space-between;
+  gap: 14px;
+}
+
+.info-row span {
+  color: var(--muted);
+}
+
+.skills {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.skills span {
+  background: #eef2ff;
+  color: var(--primary);
+  padding: 9px 13px;
+  border-radius: 999px;
+  font-weight: 800;
+}

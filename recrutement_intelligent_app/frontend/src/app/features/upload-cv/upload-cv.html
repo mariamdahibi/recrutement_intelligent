@@ -1,0 +1,194 @@
+<div class="page upload-cv-page">
+
+  <section class="upload-hero">
+
+    <div>
+      <span class="badge">Analyse CV</span>
+
+      <h1>📄 Analyse intelligente de votre CV</h1>
+
+      <p>
+        Importez votre CV pour détecter vos compétences, identifier les points à améliorer
+        et obtenir des offres recommandées.
+      </p>
+    </div>
+
+    <div class="hero-icon">
+      📄
+    </div>
+
+  </section>
+
+  <section class="upload-grid">
+
+    <article class="card upload-card">
+
+      <h2>Importer votre CV</h2>
+
+      <label class="upload-zone">
+
+        <input
+          type="file"
+          accept=".pdf,.doc,.docx"
+          (change)="onFileSelected($event)"
+        />
+
+        <div>
+          <span>☁️</span>
+          <h3>Choisir un fichier</h3>
+          <p>Formats acceptés : PDF, DOC, DOCX</p>
+        </div>
+
+      </label>
+
+      <div
+        class="file-preview"
+        *ngIf="selectedFile"
+      >
+
+        <div class="file-icon">
+          📎
+        </div>
+
+        <div>
+          <h3>{{ selectedFile.name }}</h3>
+          <p>{{ getFileSize() }}</p>
+        </div>
+
+        <button
+          class="btn-danger"
+          (click)="removeFile()"
+        >
+          Supprimer
+        </button>
+
+      </div>
+
+      <button
+        class="btn-primary analyze-btn"
+        [disabled]="!selectedFile || analyzing"
+        (click)="analyzeCv()"
+      >
+        {{ analyzing ? 'Analyse en cours...' : '🤖 Lancer l’analyse IA' }}
+      </button>
+
+    </article>
+
+    <article class="card tips-card">
+
+      <h2>Conseils pour un bon CV</h2>
+
+      <div class="tip-row">
+        <span>✅</span>
+        <p>Ajoutez clairement vos compétences techniques.</p>
+      </div>
+
+      <div class="tip-row">
+        <span>✅</span>
+        <p>Mentionnez vos expériences et projets importants.</p>
+      </div>
+
+      <div class="tip-row">
+        <span>✅</span>
+        <p>Utilisez des mots-clés liés aux offres recherchées.</p>
+      </div>
+
+      <div class="tip-row">
+        <span>✅</span>
+        <p>Gardez un CV simple, lisible et structuré.</p>
+      </div>
+
+    </article>
+
+  </section>
+
+  <section
+    class="analysis-result"
+    *ngIf="analysisDone"
+  >
+
+    <article class="card">
+
+      <h2>🧠 Compétences détectées</h2>
+
+      <div class="skills-list">
+        <span *ngFor="let skill of detectedSkills">
+          {{ skill }}
+        </span>
+      </div>
+
+      <button
+        class="btn-secondary"
+        (click)="saveSkillsToProfile()"
+      >
+        💾 Sauvegarder dans mon profil
+      </button>
+
+    </article>
+
+    <article class="card">
+
+      <h2>📌 Compétences à améliorer</h2>
+
+      <div
+        class="empty-state"
+        *ngIf="missingSkills.length === 0"
+      >
+        <span class="icon">✅</span>
+        <h3>Profil complet</h3>
+        <p>Votre profil couvre bien les compétences demandées.</p>
+      </div>
+
+      <div
+        class="missing-list"
+        *ngIf="missingSkills.length > 0"
+      >
+        <span *ngFor="let skill of missingSkills">
+          {{ skill }}
+        </span>
+      </div>
+
+    </article>
+
+  </section>
+
+  <section
+    class="card recommended-section"
+    *ngIf="analysisDone"
+  >
+
+    <h2>🎯 Offres recommandées après analyse</h2>
+
+    <div
+      class="recommended-grid"
+      *ngIf="recommendedJobs.length > 0"
+    >
+
+      <article
+        class="recommended-card"
+        *ngFor="let job of recommendedJobs"
+      >
+
+        <h3>{{ job.title }}</h3>
+        <p>{{ job.company || 'Entreprise non renseignée' }}</p>
+        <small>📍 {{ job.location || 'Localisation non renseignée' }}</small>
+
+        <div class="score-box">
+          <span>Score IA</span>
+          <strong>{{ calculateScore(job) }}%</strong>
+        </div>
+
+        <a
+          routerLink="/app/jobs"
+          class="btn-primary"
+        >
+          Voir l’offre
+        </a>
+
+      </article>
+
+    </div>
+
+  </section>
+
+</div>-

@@ -1,0 +1,195 @@
+<div class="profile-page">
+
+  <div *ngIf="loading" class="loading-card">
+    Loading profile...
+  </div>
+
+  <div *ngIf="error && !loading" class="error-card">
+    {{ error }}
+  </div>
+
+  <ng-container *ngIf="!loading && !error">
+
+    <section class="profile-hero">
+
+      <div class="hero-content">
+
+        <span class="role-badge">
+          {{ getRoleLabel() }}
+        </span>
+
+        <h1>
+          {{ getPageTitle() }}
+        </h1>
+
+        <p>
+          {{ getPageSubtitle() }}
+        </p>
+
+      </div>
+
+      <div class="hero-card">
+
+        <div class="hero-avatar">
+          {{ getInitial() }}
+        </div>
+
+        <h2>
+          {{ getDisplayName() }}
+        </h2>
+
+        <p>
+          {{ getDisplayEmail() }}
+        </p>
+
+      </div>
+
+    </section>
+
+    <section class="profile-grid">
+
+      <article class="profile-card">
+
+        <div class="profile-header">
+
+          <div class="main-avatar">
+            {{ getInitial() }}
+          </div>
+
+          <div>
+            <h2>{{ getDisplayName() }}</h2>
+            <p>{{ getDisplayEmail() }}</p>
+          </div>
+
+        </div>
+
+        <div class="info-grid">
+
+          <div class="info-box">
+            <span>Rôle</span>
+            <strong>{{ getRoleLabel() }}</strong>
+          </div>
+
+          <div class="info-box" *ngIf="isUser()">
+            <span>Score IA</span>
+            <strong>{{ getScore() }}%</strong>
+          </div>
+
+          <div class="info-box" *ngIf="isRecruiter()">
+            <span>Permission</span>
+            <strong>Gestion des offres</strong>
+          </div>
+
+          <div class="info-box" *ngIf="isAdmin()">
+            <span>Permission</span>
+            <strong>Administration complète</strong>
+          </div>
+
+        </div>
+
+        <div class="skills-section" *ngIf="isUser()">
+
+          <h3>Compétences</h3>
+
+          <div class="skills-list">
+
+            <span
+              class="skill-chip"
+              *ngFor="let skill of getSkillsArray()"
+            >
+              {{ skill }}
+            </span>
+
+            <span
+              class="skill-chip empty"
+              *ngIf="getSkillsArray().length === 0"
+            >
+              Aucune compétence disponible
+            </span>
+
+          </div>
+
+        </div>
+
+        <div class="progress-section" *ngIf="isUser()">
+
+          <div class="progress-title">
+            <span>Niveau de compatibilité IA</span>
+            <strong>{{ getScore() }}%</strong>
+          </div>
+
+          <div class="progress">
+            <div
+              class="progress-fill"
+              [style.width.%]="getScore()">
+            </div>
+          </div>
+
+        </div>
+
+        <button
+          class="pdf-btn"
+          (click)="downloadPDF()"
+        >
+          📄 Export PDF
+        </button>
+
+      </article>
+
+      <aside class="action-panel">
+
+        <h3>Actions rapides</h3>
+
+        <div class="actions">
+
+          <a
+            *ngIf="isUser()"
+            routerLink="/app/jobs"
+          >
+            💼 Voir les offres
+          </a>
+
+          <a
+            *ngIf="isUser()"
+            routerLink="/app/recommendations"
+          >
+            🤖 Voir mes recommandations IA
+          </a>
+
+          <a
+            *ngIf="isRecruiter()"
+            routerLink="/app/jobs"
+          >
+            ➕ Publier une offre
+          </a>
+
+          <a
+            *ngIf="isRecruiter()"
+            routerLink="/app/applications"
+          >
+            📨 Gérer les candidatures
+          </a>
+
+          <a
+            *ngIf="isAdmin()"
+            routerLink="/app/admin/users"
+          >
+            🛡️ Gérer les utilisateurs
+          </a>
+
+          <a
+            *ngIf="isAdmin()"
+            routerLink="/app/dashboard"
+          >
+            📊 Voir le dashboard admin
+          </a>
+
+        </div>
+
+      </aside>
+
+    </section>
+
+  </ng-container>
+
+</div>

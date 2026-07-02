@@ -1,0 +1,4 @@
+-------------------------------------------------------------------------------
+Test set: com.recrutement.recrutement_intelligent_app.RecrutementIntelligentAppApplicationTests
+-------------------------------------------------------------------------------
+Tests run: 1, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 8.980 s -- in com.recrutement.recrutement_intelligent_app.RecrutementIntelligentAppApplicationTests

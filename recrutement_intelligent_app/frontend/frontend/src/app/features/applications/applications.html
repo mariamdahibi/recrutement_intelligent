@@ -1,0 +1,104 @@
+<div class="applications-page">
+
+  <div *ngIf="loading" class="loading-card">
+    Loading applications...
+  </div>
+
+  <div *ngIf="error && !loading" class="error-card">
+    {{ error }}
+  </div>
+
+  <ng-container *ngIf="!loading && !error">
+
+    <div class="page-header">
+
+      <div>
+        <span class="badge">Espace Recruteur</span>
+
+        <h1>📨 Applications</h1>
+
+        <p>
+          Suivi des candidatures reçues sur la plateforme.
+        </p>
+      </div>
+
+    </div>
+
+    <div
+      *ngIf="applications.length === 0"
+      class="empty-card"
+    >
+      Aucune candidature disponible.
+    </div>
+
+    <div class="applications-grid">
+
+      <article
+        class="application-card"
+        *ngFor="let application of applications"
+      >
+
+        <div class="card-top">
+
+          <div class="candidate">
+
+            <div class="avatar">
+              {{ getCandidateInitial(application) }}
+            </div>
+
+            <div>
+              <h2>
+                {{ getCandidateName(application) }}
+              </h2>
+
+              <p>
+                {{ getCandidateEmail(application) }}
+              </p>
+            </div>
+
+          </div>
+
+          <span
+            class="status"
+            [ngClass]="getStatusClass(application.status)"
+          >
+            {{ application.status }}
+          </span>
+
+        </div>
+
+        <div class="job-box">
+
+          <span>Poste demandé</span>
+
+          <h3>
+            {{ getJobTitle(application) }}
+          </h3>
+
+          <p>
+            {{ getJobDescription(application) }}
+          </p>
+
+          <small *ngIf="getJobLocation(application)">
+            📍 {{ getJobLocation(application) }}
+          </small>
+
+        </div>
+
+        <div class="score-box" *ngIf="getScore(application) > 0">
+
+          <span>Score IA</span>
+
+          <strong>
+            {{ getScore(application) }}%
+          </strong>
+
+        </div>
+
+      </article>
+
+    </div>
+
+  </ng-container>
+
+</div>

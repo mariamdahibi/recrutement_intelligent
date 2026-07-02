@@ -1,0 +1,265 @@
+<div class="page users-page">
+
+  <div *ngIf="loading" class="skeleton-list">
+    <div class="skeleton skeleton-line"></div>
+    <div class="skeleton skeleton-card"></div>
+    <div class="skeleton skeleton-card"></div>
+  </div>
+
+  <div *ngIf="error && !loading" class="error-card">
+    {{ error }}
+  </div>
+
+  <ng-container *ngIf="!loading && !error">
+
+    <section class="users-hero">
+
+      <div>
+        <span class="badge">Administration</span>
+
+        <h1>🛡️ Gestion des utilisateurs</h1>
+
+        <p>
+          Gérez les administrateurs, recruteurs et candidats de la plateforme.
+        </p>
+      </div>
+
+      <button
+        class="btn-primary"
+        (click)="openAddModal()"
+      >
+        ➕ Ajouter utilisateur
+      </button>
+
+    </section>
+
+    <section class="stats-grid">
+
+      <article class="stat-card">
+        <span>👥</span>
+        <div>
+          <h3>{{ users.length }}</h3>
+          <p>Total utilisateurs</p>
+        </div>
+      </article>
+
+      <article class="stat-card">
+        <span>🛡️</span>
+        <div>
+          <h3>{{ getAdminCount() }}</h3>
+          <p>Admins</p>
+        </div>
+      </article>
+
+      <article class="stat-card">
+        <span>💼</span>
+        <div>
+          <h3>{{ getRecruiterCount() }}</h3>
+          <p>Recruteurs</p>
+        </div>
+      </article>
+
+      <article class="stat-card">
+        <span>👤</span>
+        <div>
+          <h3>{{ getUserCount() }}</h3>
+          <p>Utilisateurs</p>
+        </div>
+      </article>
+
+    </section>
+
+    <section class="toolbar-card">
+
+      <div class="filter-group">
+        <label>Filtrer par rôle</label>
+
+        <select
+          class="input-control"
+          [(ngModel)]="roleFilter"
+        >
+          <option value="ALL">Tous les rôles</option>
+          <option value="ADMIN">Admins</option>
+          <option value="RECRUITER">Recruteurs</option>
+          <option value="USER">Utilisateurs</option>
+        </select>
+      </div>
+
+      <div class="result-count">
+        {{ filteredUsers.length }} résultat(s)
+      </div>
+
+    </section>
+
+    <div
+      class="empty-state"
+      *ngIf="filteredUsers.length === 0"
+    >
+      <span class="icon">👥</span>
+      <h3>Aucun utilisateur trouvé</h3>
+      <p>Essayez de modifier le filtre ou la recherche globale.</p>
+    </div>
+
+    <section
+      class="users-grid"
+      *ngIf="filteredUsers.length > 0"
+    >
+
+      <article
+        class="user-card"
+        *ngFor="let user of paginatedUsers"
+      >
+
+        <div class="user-header">
+
+          <div class="user-avatar">
+            {{ getInitial(user) }}
+          </div>
+
+          <div>
+            <h2>{{ user.name }}</h2>
+            <p>{{ user.email }}</p>
+          </div>
+
+        </div>
+
+        <span
+          class="role-badge"
+          [ngClass]="getRoleClass(user.role)"
+        >
+          {{ getRoleLabel(user.role) }}
+        </span>
+
+        <div class="user-actions">
+          <button
+            class="btn-danger"
+            (click)="askDelete(user)"
+          >
+            Supprimer
+          </button>
+        </div>
+
+      </article>
+
+    </section>
+
+    <div
+      class="pagination"
+      *ngIf="filteredUsers.length > 0"
+    >
+
+      <button
+        (click)="previousPage()"
+        [disabled]="page === 1"
+      >
+        Précédent
+      </button>
+
+      <span>Page {{ page }} / {{ totalPages }}</span>
+
+      <button
+        (click)="nextPage()"
+        [disabled]="page === totalPages"
+      >
+        Suivant
+      </button>
+
+    </div>
+
+  </ng-container>
+
+  <div
+    class="modal-backdrop"
+    *ngIf="showAddModal"
+  >
+
+    <div class="modal">
+
+      <h2>➕ Ajouter un utilisateur</h2>
+
+      <div class="modal-form">
+
+        <input
+          class="input-control"
+          [(ngModel)]="newUser.name"
+          placeholder="Nom complet"
+        />
+
+        <input
+          class="input-control"
+          [(ngModel)]="newUser.email"
+          placeholder="Email"
+        />
+
+        <input
+          class="input-control"
+          [(ngModel)]="newUser.password"
+          placeholder="Mot de passe"
+        />
+
+        <select
+          class="input-control"
+          [(ngModel)]="newUser.role"
+        >
+          <option value="ADMIN">Admin</option>
+          <option value="RECRUITER">Recruteur</option>
+          <option value="USER">Utilisateur</option>
+        </select>
+
+      </div>
+
+      <div class="modal-actions">
+        <button
+          class="btn-secondary"
+          (click)="closeAddModal()"
+        >
+          Annuler
+        </button>
+
+        <button
+          class="btn-primary"
+          (click)="createUser()"
+        >
+          Enregistrer
+        </button>
+      </div>
+
+    </div>
+
+  </div>
+
+  <div
+    class="modal-backdrop"
+    *ngIf="showDeleteModal"
+  >
+
+    <div class="modal">
+
+      <h2>⚠️ Confirmation</h2>
+
+      <p>
+        Voulez-vous vraiment supprimer
+        <strong>{{ selectedUser?.name }}</strong> ?
+      </p>
+
+      <div class="modal-actions">
+        <button
+          class="btn-secondary"
+          (click)="cancelDelete()"
+        >
+          Annuler
+        </button>
+
+        <button
+          class="btn-danger"
+          (click)="confirmDelete()"
+        >
+          Supprimer
+        </button>
+      </div>
+
+    </div>
+
+  </div>
+
+</div>

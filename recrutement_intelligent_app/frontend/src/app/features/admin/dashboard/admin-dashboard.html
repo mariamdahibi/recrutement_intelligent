@@ -1,0 +1,225 @@
+<div class="page admin-dashboard-page">
+
+  <div *ngIf="loading" class="skeleton-list">
+    <div class="skeleton skeleton-line"></div>
+    <div class="skeleton skeleton-card"></div>
+    <div class="skeleton skeleton-card"></div>
+  </div>
+
+  <div *ngIf="error && !loading" class="error-card">
+    {{ error }}
+  </div>
+
+  <ng-container *ngIf="!loading && !error">
+
+    <section class="admin-hero">
+
+      <div>
+        <span class="badge">Administration</span>
+
+        <h1>🛡️ Dashboard Admin</h1>
+
+        <p>
+          Vue globale de la plateforme : utilisateurs, offres, candidatures et activité.
+        </p>
+      </div>
+
+      <div class="hero-icon">
+        ⚙️
+      </div>
+
+    </section>
+
+    <section class="stats-grid">
+
+      <article class="stat-card">
+        <span>👥</span>
+        <div>
+          <h3>{{ users.length }}</h3>
+          <p>Utilisateurs</p>
+        </div>
+      </article>
+
+      <article class="stat-card">
+        <span>💼</span>
+        <div>
+          <h3>{{ jobs.length }}</h3>
+          <p>Offres</p>
+        </div>
+      </article>
+
+      <article class="stat-card">
+        <span>📨</span>
+        <div>
+          <h3>{{ applications.length }}</h3>
+          <p>Candidatures</p>
+        </div>
+      </article>
+
+      <article class="stat-card">
+        <span>✅</span>
+        <div>
+          <h3>{{ getAcceptanceRate() }}%</h3>
+          <p>Taux acceptation</p>
+        </div>
+      </article>
+
+    </section>
+
+    <section class="admin-grid">
+
+      <article class="card analytics-card">
+
+        <h2>Répartition des utilisateurs</h2>
+
+        <div class="progress-item">
+          <div>
+            <span>Admins</span>
+            <strong>{{ getAdminCount() }}</strong>
+          </div>
+
+          <div class="bar">
+            <div
+              class="progress"
+              [style.width.%]="getBarWidth(getAdminCount(), users.length)">
+            </div>
+          </div>
+        </div>
+
+        <div class="progress-item">
+          <div>
+            <span>Recruteurs</span>
+            <strong>{{ getRecruiterCount() }}</strong>
+          </div>
+
+          <div class="bar">
+            <div
+              class="progress"
+              [style.width.%]="getBarWidth(getRecruiterCount(), users.length)">
+            </div>
+          </div>
+        </div>
+
+        <div class="progress-item">
+          <div>
+            <span>Candidats</span>
+            <strong>{{ getCandidateCount() }}</strong>
+          </div>
+
+          <div class="bar">
+            <div
+              class="progress"
+              [style.width.%]="getBarWidth(getCandidateCount(), users.length)">
+            </div>
+          </div>
+        </div>
+
+      </article>
+
+      <article class="card analytics-card">
+
+        <h2>Statuts des candidatures</h2>
+
+        <div class="status-list">
+
+          <div>
+            <span class="dot pending"></span>
+            En attente : {{ getStatusCount('PENDING') }}
+          </div>
+
+          <div>
+            <span class="dot shortlisted"></span>
+            Shortlist : {{ getStatusCount('SHORTLISTED') }}
+          </div>
+
+          <div>
+            <span class="dot interview"></span>
+            Entretien : {{ getStatusCount('INTERVIEW') }}
+          </div>
+
+          <div>
+            <span class="dot accepted"></span>
+            Acceptées : {{ getStatusCount('ACCEPTED') }}
+          </div>
+
+          <div>
+            <span class="dot rejected"></span>
+            Refusées : {{ getStatusCount('REJECTED') }}
+          </div>
+
+        </div>
+
+      </article>
+
+    </section>
+
+    <section class="admin-grid">
+
+      <article class="card quick-actions">
+
+        <h2>Actions rapides</h2>
+
+        <div class="actions-grid">
+
+          <a routerLink="/app/admin/users" class="action-card">
+            <span>👥</span>
+            <strong>Gérer utilisateurs</strong>
+            <p>Créer, supprimer ou changer les rôles.</p>
+          </a>
+
+          <a routerLink="/app/applications" class="action-card">
+            <span>📨</span>
+            <strong>Voir candidatures</strong>
+            <p>Superviser le traitement recruteur.</p>
+          </a>
+
+          <a routerLink="/app/recruiter-pipeline" class="action-card">
+            <span>🧩</span>
+            <strong>Pipeline</strong>
+            <p>Suivi visuel des candidatures.</p>
+          </a>
+
+          <a routerLink="/app/admin/logs" class="action-card">
+            <span>📜</span>
+            <strong>Logs activité</strong>
+            <p>Consulter l’historique admin.</p>
+          </a>
+
+        </div>
+
+      </article>
+
+      <article class="card logs-card">
+
+        <h2>Activité récente</h2>
+
+        <div
+          class="empty-logs"
+          *ngIf="getRecentLogs().length === 0"
+        >
+          Aucun log pour le moment.
+        </div>
+
+        <div
+          class="log-row"
+          *ngFor="let log of getRecentLogs()"
+        >
+
+          <div class="log-icon">
+            {{ getLogIcon(log.type) }}
+          </div>
+
+          <div>
+            <h3>{{ log.action }}</h3>
+            <p>{{ log.actor || 'Système' }} • {{ log.createdAt | date:'short' }}</p>
+          </div>
+
+        </div>
+
+      </article>
+
+    </section>
+
+  </ng-container>
+
+</div>

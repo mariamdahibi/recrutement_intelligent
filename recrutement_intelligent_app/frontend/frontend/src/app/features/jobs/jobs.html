@@ -1,0 +1,115 @@
+<div class="jobs-page">
+
+  <div class="page-header">
+
+    <div>
+      <h1>💼 Jobs</h1>
+      <p>Liste des offres disponibles sur la plateforme.</p>
+    </div>
+
+    <input
+      class="search"
+      type="text"
+      [(ngModel)]="searchText"
+      (input)="searchJobs()"
+      placeholder="Rechercher un job..."
+    />
+
+  </div>
+
+  <div
+    class="form-card"
+    *ngIf="canManageJobs()"
+  >
+
+    <h2>Publier une nouvelle offre</h2>
+
+    <div class="form-grid">
+
+      <input
+        type="text"
+        [(ngModel)]="newJob.title"
+        placeholder="Titre du poste"
+      />
+
+      <input
+        type="text"
+        [(ngModel)]="newJob.company"
+        placeholder="Entreprise"
+      />
+
+      <input
+        type="text"
+        [(ngModel)]="newJob.skills"
+        placeholder="Compétences : Angular, Java..."
+      />
+
+      <input
+        type="text"
+        [(ngModel)]="newJob.description"
+        placeholder="Description"
+      />
+
+    </div>
+
+    <button
+      class="add-btn"
+      (click)="addJob()"
+    >
+      Ajouter l’offre
+    </button>
+
+  </div>
+
+  <div *ngIf="loading" class="loading-card">
+    Loading jobs...
+  </div>
+
+  <div *ngIf="error && !loading" class="error-card">
+    {{ error }}
+  </div>
+
+  <div
+    class="jobs-grid"
+    *ngIf="!loading && !error"
+  >
+
+    <div
+      class="job-card"
+      *ngFor="let job of filteredJobs"
+    >
+
+      <h2>{{ job.title }}</h2>
+
+      <p class="company">
+        {{ job.company || 'Company' }}
+      </p>
+
+      <p class="description">
+        {{ job.description }}
+      </p>
+
+      <div class="skills">
+
+        <span
+          class="skill"
+          *ngFor="let skill of getSkillsArray(job.skills)"
+        >
+          {{ skill }}
+        </span>
+
+      </div>
+
+      <button
+        *ngIf="canManageJobs()"
+        class="delete-btn"
+        (click)="deleteJob(job.id)"
+      >
+        Supprimer
+      </button>
+
+    </div>
+
+  </div>
+
+</div>

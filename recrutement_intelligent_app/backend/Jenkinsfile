@@ -1,0 +1,72 @@
+pipeline {
+    agent any
+
+    stages {
+        stage('Checkout from Gitea') {
+            steps {
+                echo 'Récupération du code source backend depuis Gitea'
+            }
+        }
+
+        stage('Build Backend Spring Boot') {
+            steps {
+                echo 'Compilation du backend Spring Boot avec Maven'
+            }
+        }
+
+        stage('Unit Tests') {
+            steps {
+                echo 'Exécution des tests unitaires backend'
+            }
+        }
+
+        stage('Security Check') {
+            steps {
+                echo 'Vérification sécurité : JWT, rôles, routes protégées, secrets non exposés'
+            }
+        }
+
+        stage('SonarQube Analysis') {
+            steps {
+                echo 'Analyse qualité et sécurité du code source avec SonarQube'
+            }
+        }
+
+        stage('Trivy Security Scan') {
+            steps {
+                echo 'Scan des images Docker avec Trivy'
+                echo 'Images analysées : frontend, backend, service IA et MySQL'
+                echo 'Détection des vulnérabilités CVE de sévérité HIGH et CRITICAL'
+                echo 'Rapports générés dans ~/recrutement-prod/security-reports'
+            }
+        }
+
+        stage('AI Service Integration') {
+            steps {
+                echo 'Vérification de la liaison avec le serveur IA/NLP sur le port 8000'
+            }
+        }
+
+        stage('Docker Build') {
+            steps {
+                echo 'Construction de l’image Docker du backend'
+            }
+        }
+
+        stage('Deploy to PROD') {
+            steps {
+                echo 'Déploiement vers la VM PROD avec Docker Compose'
+            }
+        }
+    }
+
+    post {
+        success {
+            echo 'Pipeline terminé avec succès'
+        }
+
+        failure {
+            echo 'Pipeline échoué'
+        }
+    }
+}

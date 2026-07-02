@@ -1,0 +1,387 @@
+<div class="page recruiter-applications-page">
+
+  <div *ngIf="loading" class="skeleton-list">
+    <div class="skeleton skeleton-line"></div>
+    <div class="skeleton skeleton-card"></div>
+    <div class="skeleton skeleton-card"></div>
+  </div>
+
+  <div *ngIf="error && !loading" class="error-card">
+    {{ error }}
+  </div>
+
+  <ng-container *ngIf="!loading && !error">
+
+    <section class="recruiter-hero">
+
+      <div>
+        <span class="badge">Espace recruteur</span>
+
+        <h1>📨 Gestion intelligente des candidatures</h1>
+
+        <p>
+          Classez, filtrez, shortlistez et traitez les meilleurs profils plus rapidement grâce au score IA.
+        </p>
+      </div>
+
+      <button
+        class="btn-primary"
+        (click)="exportCSV()"
+      >
+        📥 Export CSV
+      </button>
+
+    </section>
+
+    <section class="stats-grid">
+
+      <article class="stat-card">
+        <span>📨</span>
+        <div>
+          <h3>{{ getTotalCount() }}</h3>
+          <p>Total</p>
+        </div>
+      </article>
+
+      <article class="stat-card">
+        <span>⏳</span>
+        <div>
+          <h3>{{ getPendingCount() }}</h3>
+          <p>En attente</p>
+        </div>
+      </article>
+
+      <article class="stat-card">
+        <span>⭐</span>
+        <div>
+          <h3>{{ getShortlistedCount() }}</h3>
+          <p>Shortlist</p>
+        </div>
+      </article>
+
+      <article class="stat-card">
+        <span>📅</span>
+        <div>
+          <h3>{{ getInterviewCount() }}</h3>
+          <p>Entretiens</p>
+        </div>
+      </article>
+
+      <article class="stat-card">
+        <span>✅</span>
+        <div>
+          <h3>{{ getAcceptedCount() }}</h3>
+          <p>Acceptées</p>
+        </div>
+      </article>
+
+      <article class="stat-card">
+        <span>❌</span>
+        <div>
+          <h3>{{ getRejectedCount() }}</h3>
+          <p>Refusées</p>
+        </div>
+      </article>
+
+    </section>
+
+    <section class="filters-panel">
+
+      <div class="filter-group">
+        <label>Offre</label>
+
+        <select
+          class="input-control"
+          [(ngModel)]="jobFilter"
+        >
+          <option value="ALL">Toutes les offres</option>
+
+          <option
+            *ngFor="let job of getAvailableJobs()"
+            [value]="job"
+          >
+            {{ job }}
+          </option>
+        </select>
+      </div>
+
+      <div class="filter-group">
+        <label>Statut</label>
+
+        <select
+          class="input-control"
+          [(ngModel)]="statusFilter"
+        >
+          <option value="ALL">Tous les statuts</option>
+          <option value="PENDING">En attente</option>
+          <option value="SHORTLISTED">Shortlist</option>
+          <option value="INTERVIEW">Entretien</option>
+          <option value="ACCEPTED">Acceptées</option>
+          <option value="REJECTED">Refusées</option>
+        </select>
+      </div>
+
+      <div class="filter-group">
+        <label>Score minimum</label>
+
+        <select
+          class="input-control"
+          [(ngModel)]="minScoreFilter"
+        >
+          <option [value]="0">Tous les scores</option>
+          <option [value]="50">Score ≥ 50%</option>
+          <option [value]="70">Score ≥ 70%</option>
+          <option [value]="85">Score ≥ 85%</option>
+        </select>
+      </div>
+
+      <div class="filter-group">
+        <label>Tri</label>
+
+        <select
+          class="input-control"
+          [(ngModel)]="sortOption"
+        >
+          <option value="scoreDesc">Meilleur score d’abord</option>
+          <option value="scoreAsc">Score le plus faible</option>
+          <option value="recent">Plus récentes</option>
+          <option value="status">Par statut</option>
+        </select>
+      </div>
+
+      <div class="result-count">
+        {{ filteredApplications.length }} résultat(s)
+      </div>
+
+    </section>
+
+    <section
+      class="bulk-panel"
+      *ngIf="filteredApplications.length > 0"
+    >
+
+      <label class="select-all">
+        <input
+          type="checkbox"
+          [checked]="areAllPageSelected()"
+          (change)="toggleSelectAllCurrentPage()"
+        />
+
+        Sélectionner cette page
+      </label>
+
+      <div class="bulk-actions" *ngIf="selectedCount > 0">
+
+        <span>
+          {{ selectedCount }} sélectionnée(s)
+        </span>
+
+        <button
+          class="btn-secondary"
+          (click)="bulkUpdateStatus('SHORTLISTED')"
+        >
+          ⭐ Shortlist
+        </button>
+
+        <button
+          class="btn-secondary"
+          (click)="bulkUpdateStatus('INTERVIEW')"
+        >
+          📅 Entretien
+        </button>
+
+        <button
+          class="btn-primary"
+          (click)="bulkUpdateStatus('ACCEPTED')"
+        >
+          ✅ Accepter
+        </button>
+
+        <button
+          class="btn-danger"
+          (click)="bulkUpdateStatus('REJECTED')"
+        >
+          ❌ Refuser
+        </button>
+
+        <button
+          class="btn-secondary"
+          (click)="clearSelection()"
+        >
+          Annuler
+        </button>
+
+      </div>
+
+    </section>
+
+    <div
+      class="empty-state"
+      *ngIf="filteredApplications.length === 0"
+    >
+      <span class="icon">📭</span>
+      <h3>Aucune candidature trouvée</h3>
+      <p>Essayez de modifier les filtres ou la recherche globale.</p>
+    </div>
+
+    <section
+      class="applications-grid"
+      *ngIf="filteredApplications.length > 0"
+    >
+
+      <article
+        class="application-card"
+        *ngFor="let application of paginatedApplications"
+      >
+
+        <div class="card-top">
+
+          <input
+            type="checkbox"
+            class="selection-checkbox"
+            [checked]="isSelected(application)"
+            (change)="toggleSelection(application)"
+          />
+
+          <div class="candidate-avatar">
+            {{ getCandidateInitial(application) }}
+          </div>
+
+          <div class="candidate-info">
+            <h2>{{ getCandidateName(application) }}</h2>
+            <p>{{ getCandidateEmail(application) }}</p>
+          </div>
+
+          <span
+            class="status"
+            [ngClass]="getStatusClass(application.status)"
+          >
+            {{ getStatusLabel(application.status) }}
+          </span>
+
+        </div>
+
+        <div class="job-box">
+
+          <span>Poste demandé</span>
+
+          <h3>{{ getJobTitle(application) }}</h3>
+
+          <p class="company">
+            🏢 {{ getJobCompany(application) }}
+          </p>
+
+          <p class="description">
+            {{ getJobDescription(application) }}
+          </p>
+
+          <p class="location">
+            📍 {{ getJobLocation(application) }}
+          </p>
+
+        </div>
+
+        <div
+          class="score-card"
+          [ngClass]="getScoreClass(getScore(application))"
+        >
+
+          <div class="score-header">
+            <span>{{ getProfileLevel(getScore(application)) }}</span>
+            <strong>{{ getScore(application) }}%</strong>
+          </div>
+
+          <div class="score-bar">
+            <div
+              class="score-progress"
+              [style.width.%]="getScore(application)"
+            ></div>
+          </div>
+
+          <p>
+            {{ getRecommendationText(getScore(application)) }}
+          </p>
+
+        </div>
+
+        <div class="quick-actions">
+
+          <button
+            class="btn-secondary"
+            (click)="updateStatus(application, 'SHORTLISTED')"
+          >
+            ⭐ Shortlist
+          </button>
+
+          <button
+            class="btn-secondary"
+            (click)="updateStatus(application, 'INTERVIEW')"
+          >
+            📅 Entretien
+          </button>
+
+          <button
+            class="btn-primary"
+            (click)="updateStatus(application, 'ACCEPTED')"
+          >
+            ✅ Accepter
+          </button>
+
+          <button
+            class="btn-danger"
+            (click)="updateStatus(application, 'REJECTED')"
+          >
+            ❌ Refuser
+          </button>
+
+        </div>
+
+        <div class="note-section">
+
+          <label>Note interne recruteur</label>
+
+          <textarea
+            class="note-input"
+            [(ngModel)]="application.recruiterNote"
+            placeholder="Exemple : Bon profil Angular, à contacter pour entretien."
+          ></textarea>
+
+          <button
+            class="btn-secondary"
+            (click)="saveNote(application)"
+          >
+            💾 Enregistrer la note
+          </button>
+
+        </div>
+
+      </article>
+
+    </section>
+
+    <div
+      class="pagination"
+      *ngIf="filteredApplications.length > 0"
+    >
+
+      <button
+        (click)="previousPage()"
+        [disabled]="page === 1"
+      >
+        Précédent
+      </button>
+
+      <span>Page {{ page }} / {{ totalPages }}</span>
+
+      <button
+        (click)="nextPage()"
+        [disabled]="page === totalPages"
+      >
+        Suivant
+      </button>
+
+    </div>
+
+  </ng-container>
+
+</div>
